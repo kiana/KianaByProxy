@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="0,1" >
+   
+    	<TableRow        
+    	    android:id="@+id/tableRow1"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:padding="5dp">
+	        <TextView
+	            android:layout_span="2"
+	            android:id="@+id/app_description"
+	        	android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+	        	android:padding="@dimen/padding_medium"
+	        	android:text="@string/description" />    	    
+    	</TableRow>
+    	
+    	<TableRow 
+    	    android:id="@+id/tableRow2"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:padding="5dp">
+	        <ImageView
+	            android:layout_column="0"
+	            android:id="@+id/img_youtube"
+	            android:clickable="true"
+	            android:contentDescription="@string/youtube"
+	            android:src="@drawable/youtube_64"
+	            android:hapticFeedbackEnabled="true"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />  
+	        <ImageView
+	            android:layout_column="1"
+	            android:id="@+id/img_flickr"
+	            android:clickable="true"
+	            android:contentDescription="@string/flickr"
+	            android:src="@drawable/flickr_64"
+	            android:hapticFeedbackEnabled="true"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />				  	    
+    	</TableRow>
+    	
+    	<TableRow 
+    	    android:id="@+id/tableRow3"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:gravity="center_horizontal"
+        	android:padding="5dp">
+	        <ImageView
+	            android:id="@+id/img_twitter"
+	            android:clickable="true"
+	            android:contentDescription="@string/twitter"
+	            android:src="@drawable/twitter_64"
+	            android:hapticFeedbackEnabled="true"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />
+	        <ImageView
+	            android:id="@+id/img_blogger"
+	            android:clickable="true"
+	            android:contentDescription="@string/blogger"
+	            android:src="@drawable/blogger_64"
+	            android:hapticFeedbackEnabled="true"
+	            android:layout_width="wrap_content"
+				android:layout_height="wrap_content" />     	    
+    	</TableRow>
+    
+</TableLayout>
+

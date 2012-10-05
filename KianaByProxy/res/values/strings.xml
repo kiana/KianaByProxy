@@ -1,0 +1,31 @@
+<resources>
+
+    <string name="app_name">Kiana ByProxy</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="description">For AnDevConIV. This is the featured app for the session talk "Tracking User Behavior on the Android Device". This app tracks user behavior on the Android device for general web analytics purposes. No personally identifiable data will be stored about the user.</string>
+
+    <string name="title_activity_youtube">Youtube - KianaByProxy</string>
+    <string name="title_activity_flickr">Flickr - KianaByProxy</string>
+    <string name="title_activity_twitter">Twitter - KianaByProxy</string>
+    <string name="title_activity_blogger">Blogger - KianaByProxy</string>
+    <string name="title_activity_foursquare">Foursquare - KianaByProxy</string>
+
+    <string name="connection_error">Connection error parsing Youtube feed. Super sadness.</string>
+    <string name="xml_error">XML error parsing Youtube feed. Super sadness.</string>
+    <string name="back">&lt; back</string>
+    <string name="wait_desc">Waiting for activity to load.</string>
+    <string name="youtubethumbnail">Youtube Video Thumbnail</string>
+    <string name="flickrimage">Flickr Image</string>
+    <string name="views">views</string>
+    <string name="detail_flickr_image">Detail Flickr Image</string>
+    <string name="twitter_profile_image">Twitter Profile Image</string>
+    <string name="published">Published</string>
+    <string name="title_activity_show_blog_entry">ShowBlogEntryActivity</string>
+
+    <string name="youtube">Youtube</string>
+    <string name="flickr">Flickr</string>
+    <string name="twitter">Twitter</string>
+    <string name="blogger">Blogger</string>
+    <string name="foursquare">Foursquare</string>
+</resources>

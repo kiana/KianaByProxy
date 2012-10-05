@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:clickable="true"
+        android:text="@string/back" 
+    	android:textColor="@color/link" />
+        
+    <ImageView 
+        android:id="@+id/twitter_image"
+        android:contentDescription="@string/twitter_profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/back" />
+   
+    <TextView
+        android:id="@+id/handle" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/back"
+        android:layout_toRightOf="@id/twitter_image"/>
+    
+    <TextView
+        android:id="@+id/description" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/handle"
+        android:layout_toRightOf="@id/twitter_image" />
+        
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/twitter_image" />
+
+     <ProgressBar
+         android:id="@+id/progressBar"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         style="@android:style/Widget.ProgressBar.Large"
+         android:layout_centerInParent="true"
+         android:layout_below="@id/twitter_image"
+         android:layout_marginRight="5dp" />
+</RelativeLayout>
