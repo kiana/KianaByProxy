@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Item;
 import com.google.analytics.tracking.android.Transaction;
+import com.google.analytics.tracking.android.Transaction.Builder;
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
@@ -43,7 +45,7 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
 			}
 		});
 		
-        PayPal payPalObject = PayPal.initWithAppID(this, Constants.PAYPAL_SANDBOX, PayPal.ENV_SANDBOX);
+        PayPal payPalObject = PayPal.initWithAppID(this, Constants.PAYPAL_LIVE, PayPal.ENV_LIVE);
         getCheckoutButton(payPalObject);
     }
 
@@ -86,7 +88,7 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
     	  PayPalPayment payment = new PayPalPayment();
 
     	  payment.setCurrencyType("USD");
-    	  payment.setRecipient("kiana._1349411308_biz@gmail.com");
+    	  payment.setRecipient("kianabyproxy@gmail.com");
     	  payment.setSubtotal(new BigDecimal(5));
 
     	  payment.setPaymentType(PayPal.PAYMENT_TYPE_NONE);
@@ -103,7 +105,7 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
     	  payment.setInvoiceData(invoice);
 
     	  Intent paypalIntent = PayPal.getInstance().checkout(payment, this, this);
-    	  startActivityForResult(paypalIntent, 1); //TODO returned result probably contains orderId and other info needed to trackTransaction
+    	  startActivityForResult(paypalIntent, 1); 
     }
 
 	/*
@@ -112,7 +114,7 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
 	 */
 	@Override
 	public void onPaymentCanceled(String paymentStatus) {
-		//TODO WEB ANALYTICS -- trackEvent
+		trackEvent("Paypal|Cancelled", paymentStatus);
 	}
 
 	/*
@@ -122,7 +124,7 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
 	@Override
 	public void onPaymentFailed(String paymentStatus, String correlationId, String payKey,
 			String errorId, String errorMessage) {
-		//TODO WEB ANALYTICS -- trackEvent
+		trackEvent("Paypal|Failed", errorId + "|" + errorMessage);
 	}
 
 	/*
@@ -130,8 +132,18 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
 	 * @see com.paypal.android.MEP.PayPalResultDelegate#onPaymentSucceeded(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void onPaymentSucceeded(String payKey, String paymentStatus) {
-		//TODO WEB ANALYTICS -- trackTransaction, trackEvent
+	public void onPaymentSucceeded(String transactionId, String paymentStatus) {
+		
+		long price = ((long) 5 * 1000000);
+		Transaction.Builder builder = new Builder(transactionId, price );
+		builder.setAffiliation("Donation|Paypal");
+		Transaction transaction = builder.build();
+		transaction.addItem(new Item.Builder("PayPal Donation", "donation", price, 	1)
+			.setProductCategory("PayPal")
+			.build());
+		
+		trackTransaction(transaction);
+		trackEvent("Paypal|Succeeded", paymentStatus);
 	}
 	
     @Override
@@ -139,7 +151,6 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
     	super.onStart();
     	EasyTracker.getInstance().activityStart(this);
     }
-    
     
     @Override
     public void onStop() {
@@ -149,10 +160,13 @@ public class DonateActivity extends Activity implements PayPalResultDelegate, Se
     
     public void trackTransaction(Transaction transaction) {
     	EasyTracker.getInstance().setContext(this);	
-    	
-    	//Transaction transaction = new Transaction();
-    	
     	EasyTracker.getTracker().trackTransaction(transaction);
     }
+    
+	protected void trackEvent(String action, String message) {
+    	EasyTracker.getInstance().setContext(this);	
+    	//category, action, label, long (optional) value
+    	EasyTracker.getTracker().trackEvent("PayPal", action, message, null);
+	}
 }
 
