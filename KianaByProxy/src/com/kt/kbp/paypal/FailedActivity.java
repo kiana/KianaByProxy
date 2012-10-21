@@ -1,6 +1,5 @@
 package com.kt.kbp.paypal;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,16 +7,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsActivity;
 
-public class FailedActivity extends Activity {
+public class FailedActivity extends GoogleAnalyticsActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_failed);
+        
+        tracker.trackPageView("/failedActivity");
+        
         TextView backLink = (TextView)findViewById(R.id.back_to_main);
         backLink.setOnClickListener(new OnClickListener() {
 			@Override
@@ -30,8 +32,10 @@ public class FailedActivity extends Activity {
         donateLink.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View arg0) {
-				startActivity(new Intent(FailedActivity.this, DonateActivity.class));
+			public void onClick(View v) {
+				//category, action, label, value
+				tracker.trackEvent("Paypal", "Donate", "From Failed", 0);
+				startActivity(new Intent(v.getContext(), DonateActivity.class));
 			}
 		});
     }
@@ -41,17 +45,5 @@ public class FailedActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_failed, menu);
         return true;
     }
-
-    @Override
-    public void onStart() {
-    	super.onStart();
-    	EasyTracker.getInstance().activityStart(this);
-    }
-    
-    
-    @Override
-    public void onStop() {
-    	super.onStop();
-    	EasyTracker.getInstance().activityStop(this);
-    }  
+ 
 }

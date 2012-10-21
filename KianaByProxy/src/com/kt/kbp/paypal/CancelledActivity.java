@@ -1,6 +1,5 @@
 package com.kt.kbp.paypal;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,16 +7,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsActivity;
 
-public class CancelledActivity extends Activity {
+public class CancelledActivity extends GoogleAnalyticsActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cancelled);
+        
+        tracker.trackPageView("/cancelledActivity");
         
         TextView backLink = (TextView)findViewById(R.id.back_to_main);
         backLink.setOnClickListener(new OnClickListener() {
@@ -31,6 +32,8 @@ public class CancelledActivity extends Activity {
         donateLink.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				//category, action, label, value
+				tracker.trackEvent("Paypal", "Donate", "From Cancelled", 0);
 				startActivity(new Intent(v.getContext(), DonateActivity.class));
 			}
 		});
@@ -41,17 +44,5 @@ public class CancelledActivity extends Activity {
         getMenuInflater().inflate(R.menu.activity_cancelled, menu);
         return true;
     }
-
-    @Override
-    public void onStart() {
-    	super.onStart();
-    	EasyTracker.getInstance().activityStart(this);
-    }
-    
-    
-    @Override
-    public void onStop() {
-    	super.onStop();
-    	EasyTracker.getInstance().activityStop(this);
-    }    
+  
 }
