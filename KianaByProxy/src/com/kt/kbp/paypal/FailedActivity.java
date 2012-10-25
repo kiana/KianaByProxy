@@ -9,16 +9,16 @@ import android.widget.TextView;
 
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
+import com.kt.kbp.activitypath.ActivityPath;
+import com.kt.kbp.activitypath.ActivityPathInterface;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsActivity;
 
-public class FailedActivity extends GoogleAnalyticsActivity {
+public class FailedActivity extends GoogleAnalyticsActivity implements ActivityPathInterface {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_failed);
-        
-        tracker.trackPageView("/failedActivity");
         
         TextView backLink = (TextView)findViewById(R.id.back_to_main);
         backLink.setOnClickListener(new OnClickListener() {
@@ -34,7 +34,7 @@ public class FailedActivity extends GoogleAnalyticsActivity {
 			@Override
 			public void onClick(View v) {
 				//category, action, label, value
-				tracker.trackEvent("Paypal", "Donate", "From Failed", 0);
+				trackEvent("Paypal", "Donate", "From Failed", 0);
 				startActivity(new Intent(v.getContext(), DonateActivity.class));
 			}
 		});
@@ -45,5 +45,10 @@ public class FailedActivity extends GoogleAnalyticsActivity {
         getMenuInflater().inflate(R.menu.activity_failed, menu);
         return true;
     }
+
+	@Override
+	public ActivityPath getActivityPath() {
+		return ActivityPath.FAILED;
+	}
  
 }

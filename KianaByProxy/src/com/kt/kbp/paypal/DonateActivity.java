@@ -11,11 +11,12 @@ import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.apps.analytics.Transaction;
 import com.google.android.apps.analytics.Transaction.Builder;
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
+import com.kt.kbp.activitypath.ActivityPath;
+import com.kt.kbp.activitypath.ActivityPathInterface;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsActivity;
 import com.paypal.android.MEP.CheckoutButton;
@@ -26,7 +27,7 @@ import com.paypal.android.MEP.PayPalInvoiceItem;
 import com.paypal.android.MEP.PayPalPayment;
 import com.paypal.android.MEP.PayPalResultDelegate;
 
-public class DonateActivity extends GoogleAnalyticsActivity implements PayPalResultDelegate, Serializable {
+public class DonateActivity extends GoogleAnalyticsActivity implements PayPalResultDelegate, ActivityPathInterface, Serializable {
 
 	private static final long serialVersionUID = 4607082035320065280L;
 
@@ -34,14 +35,13 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paypal);
-        
-        tracker.trackPageView("/donateActivity");
 
 		TextView back = (TextView) findViewById(R.id.back);
 		back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MainActivity.class);
+				i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});
@@ -86,7 +86,7 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
     }
     
     public void payPalButtonClick() {
-		tracker.trackEvent("Paypal", "PayPalButton", "Click", 0);
+    	trackEvent("Paypal", "PayPalButton", "Click", 0);
 		
 		PayPalPayment payment = new PayPalPayment();
 
@@ -117,9 +117,8 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
 	 */
 	@Override
 	public void onPaymentCanceled(String paymentStatus) {
-		tracker = GoogleAnalyticsTracker.getInstance();
 		//category, action, label, value
-		tracker.trackEvent("Paypal", "Canceled", paymentStatus, 0);
+		trackEvent("Paypal", "Canceled", paymentStatus, 0);
 	}
 
 	/*
@@ -129,9 +128,8 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
 	@Override
 	public void onPaymentFailed(String paymentStatus, String correlationId, String payKey,
 			String errorId, String errorMessage) {
-		tracker = GoogleAnalyticsTracker.getInstance();
 		//category, action, label, value
-		tracker.trackEvent("Paypal", "Failed", errorId + "|" + errorMessage, 0);
+		trackEvent("Paypal", "Failed", errorId + "|" + errorMessage, 0);
 	}
 
 	/*
@@ -147,9 +145,13 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
 		Transaction transaction = builder.build();
 		
 		trackTransaction(transaction);
-		tracker = GoogleAnalyticsTracker.getInstance();
 		//category, action, label, value
-		tracker.trackEvent("Paypal", "Succeeded", paymentStatus, 0);
+		trackEvent("Paypal", "Succeeded", paymentStatus, 0);
+	}
+
+	@Override
+	public ActivityPath getActivityPath() {
+		return ActivityPath.DONATE;
 	}
 	
 }

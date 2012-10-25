@@ -9,16 +9,16 @@ import android.widget.TextView;
 
 import com.kt.kbp.MainActivity;
 import com.kt.kbp.R;
+import com.kt.kbp.activitypath.ActivityPath;
+import com.kt.kbp.activitypath.ActivityPathInterface;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsActivity;
 
-public class SucceededActivity extends GoogleAnalyticsActivity {
+public class SucceededActivity extends GoogleAnalyticsActivity implements ActivityPathInterface {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_succeeded);
-        
-        tracker.trackPageView("/succeededActivity");
         
         TextView backLink = (TextView)findViewById(R.id.back_from_success);
         backLink.setOnClickListener(new OnClickListener() {
@@ -34,5 +34,10 @@ public class SucceededActivity extends GoogleAnalyticsActivity {
         getMenuInflater().inflate(R.menu.activity_succeeded, menu);
         return true;
     }
+
+	@Override
+	public ActivityPath getActivityPath() {
+		return ActivityPath.SUCCEEDED;
+	}
     
 }
