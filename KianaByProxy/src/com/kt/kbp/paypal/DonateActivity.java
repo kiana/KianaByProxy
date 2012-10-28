@@ -41,7 +41,6 @@ public class DonateActivity extends GoogleAnalyticsActivity implements PayPalRes
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MainActivity.class);
-				i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				startActivity(i);
 			}
 		});

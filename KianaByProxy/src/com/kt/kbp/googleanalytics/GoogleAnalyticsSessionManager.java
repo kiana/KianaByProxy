@@ -2,7 +2,6 @@ package com.kt.kbp.googleanalytics;
 
 import android.app.Application;
 import android.content.Context;
-import android.provider.Settings.Secure;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.common.Constants;
@@ -14,7 +13,6 @@ public class GoogleAnalyticsSessionManager {
 	    protected Integer dispatchIntervalSecs;
 	    protected String apiKey;
 	    protected Context context;
-	    private boolean trackPath = false;
 
 	    /**
 	     * NOTE: you should use your Application context, not your Activity context, in order to avoid memory leaks.
@@ -46,8 +44,6 @@ public class GoogleAnalyticsSessionManager {
 	            else {
 	            	GoogleAnalyticsTracker.getInstance().startNewSession(apiKey, dispatchIntervalSecs, context);
 	            }
-	            GoogleAnalyticsTracker.getInstance().trackEvent("Session", "Start", Secure.ANDROID_ID, 0);
-	            trackPath = true; //at session start, track path
 	        }
 
 	        ++activityCount;
@@ -63,18 +59,8 @@ public class GoogleAnalyticsSessionManager {
 	        activityCount = Math.max(activityCount-1, 0);
 
 	        if( activityCount==0 ) {
-	        	endTracking();
+	        	GoogleAnalyticsTracker.getInstance().stopSession();
 	        }
-	    }
-
-	    public void endTracking() {
-        	GoogleAnalyticsTracker.getInstance().stopSession();
-            GoogleAnalyticsTracker.getInstance().trackEvent("Session", "End", Secure.ANDROID_ID, 0);
-            
-            String path = PathTracker.getInstance().getPath();
-            GoogleAnalyticsTracker.getInstance().trackEvent("PathTracker", "Path", path, 0);
-            GoogleAnalyticsTracker.getInstance().dispatch();
-            trackPath = false; //at session end, stop tracking path
 	    }
 
 	    /**
@@ -91,9 +77,5 @@ public class GoogleAnalyticsSessionManager {
 	     */
 	    public static GoogleAnalyticsSessionManager getInstance() {
 	        return INSTANCE;
-	    }
-	    
-	    public boolean trackPath() {
-	    	return trackPath;
 	    }
 }

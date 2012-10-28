@@ -1,6 +1,5 @@
 package com.kt.kbp.googleanalytics;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import com.amazonaws.tvmclient.AmazonClientManager;
 import com.amazonaws.tvmclient.DBManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.apps.analytics.Transaction;
+import com.keyes.youtube.OpenYouTubePlayerActivity;
 import com.kt.kbp.activitypath.ActivityPath;
 import com.kt.kbp.activitypath.ActivityPathInterface;
 import com.kt.kbp.common.Constants;
@@ -20,7 +20,7 @@ import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
 import com.kt.kbp.tracker.SessionTracker;
 
-public class GoogleAnalyticsListActivity extends ListActivity implements ExceptionTrackerInterface, ActivityPathInterface {
+public class GoogleAnalyticsYouTubeActivity extends OpenYouTubePlayerActivity implements ExceptionTrackerInterface, ActivityPathInterface {
 
 	protected GoogleAnalyticsTracker tracker;
 	protected PathTracker pathTracker;

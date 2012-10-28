@@ -1,15 +1,11 @@
-package com.kt.kbp.googleanalytics;
+package com.kt.kbp.tracker;
 
 import com.kt.kbp.activitypath.ActivityPath;
-
-import android.provider.Settings.Secure;
 
 public class PathTracker {
 
 	private StringBuilder path;
 	private static PathTracker INSTANCE;
-	private static long sessionStart;
-	private static final long FIVE_MINUTES = 1000*60*5;
 	
 	private PathTracker() {
 	}
@@ -24,7 +20,6 @@ public class PathTracker {
 	public void add(ActivityPath page) {
 		if (path == null) {
 			path = new StringBuilder(page.toString());
-			sessionStart = System.currentTimeMillis();
 		}
 		else {
 			path.append("|")
@@ -32,16 +27,12 @@ public class PathTracker {
 		}
 	}
 	
-	public String getPathName() {
-		return Secure.ANDROID_ID + "|" + sessionStart;
-	}
-	
 	public String getPath() {
 		return path.toString();
 	}
 	
-	public boolean startNewSession() {
-		return (sessionStart + FIVE_MINUTES) <= System.currentTimeMillis();
+	public boolean hasPathData() {
+		return path != null;
 	}
 	
 	public void clearPath() {
