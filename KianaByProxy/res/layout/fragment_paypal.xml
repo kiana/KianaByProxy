@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/paypalfrag">
+    
+	<TextView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:clickable="true"
+        android:text="@string/back" 
+    	android:textColor="@color/link" />
+        
+    <TextView
+        android:id="@+id/main_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:layout_below="@id/back"
+        android:textSize="16dp"
+        android:text="@string/donation_description" />
+    
+    <RelativeLayout
+        android:id="@+id/donate_button"
+        android:layout_below="@id/main_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

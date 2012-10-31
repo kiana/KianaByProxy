@@ -12,15 +12,15 @@ import com.amazonaws.tvmclient.AmazonClientManager;
 import com.amazonaws.tvmclient.DBManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.apps.analytics.Transaction;
-import com.kt.kbp.activitypath.ActivityPath;
-import com.kt.kbp.activitypath.ActivityPathInterface;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.ExceptionTrackerInterface;
+import com.kt.kbp.path.Path;
+import com.kt.kbp.path.PathInterface;
 import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
 import com.kt.kbp.tracker.SessionTracker;
 
-public class GoogleAnalyticsActivity extends Activity implements ExceptionTrackerInterface, ActivityPathInterface {
+public class GoogleAnalyticsActivity extends Activity implements ExceptionTrackerInterface, PathInterface {
 
 	protected GoogleAnalyticsTracker tracker;
 	protected PathTracker pathTracker;
@@ -30,42 +30,28 @@ public class GoogleAnalyticsActivity extends Activity implements ExceptionTracke
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Need to do this for every activity that uses google analytics
-        GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getTracker().trackPageView(getClass().getSimpleName());
-        Log.i("userPathData", "onResume-" + getClass().getSimpleName());
         if (getSessionTracker().shouldStartNewSession() 
         		&& getPathTracker().hasPathData()
         		&& getLocationTracker().hasLocation()) {
         	insertUserPathData();
         }
         
-    	getPathTracker().add(getActivityPath());
+    	getPathTracker().add(getPath());
     	getSessionTracker().update();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onDestroy();
-        Log.i("userPathData", "onPause-" + getClass().getSimpleName());
     }
     
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i("userPathData", "onDestroy-" + getClass().getSimpleName());
     	
         // Purge analytics so they don't hold references to this activity
         getTracker().dispatch();
-
-        // Need to do this for every activity that uses google analytics
-        GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();
     }
     
     @Override
@@ -75,6 +61,7 @@ public class GoogleAnalyticsActivity extends Activity implements ExceptionTracke
     
     @Override
     public void onUserLeaveHint() {
+        getTracker().dispatch();
     	Log.i("userPathData", "onUserLeaveHint called for " + getClass().getSimpleName());
     }
     
@@ -105,8 +92,8 @@ public class GoogleAnalyticsActivity extends Activity implements ExceptionTracke
     }
     
 	@Override
-	public ActivityPath getActivityPath() {
-		return ActivityPath.GOOGLEANALYTICS;
+	public Path getPath() {
+		return Path.GOOGLEANALYTICS;
 	}
     
 	public LocationTracker getLocationTracker() {
@@ -139,7 +126,7 @@ public class GoogleAnalyticsActivity extends Activity implements ExceptionTracke
 					Constants.DB_MANAGER, Context.MODE_PRIVATE));
 			
 	    	return DBManager.insert(clientManager, 
-	    			getID(), 
+	    			Secure.getString(getContentResolver(), Secure.ANDROID_ID), 
 	    			"" + getSessionTracker().getLastUpdateTime(), 
 	    			"" + getLocationTracker().getLocation().getLatitude(), 
 	    			"" + getLocationTracker().getLocation().getLongitude(), 
@@ -153,9 +140,5 @@ public class GoogleAnalyticsActivity extends Activity implements ExceptionTracke
 			}
 		}
     }
-    
-	private String getID() {
-		return Secure.getString(getContentResolver(),
-                Secure.ANDROID_ID);
-	}
+
 }

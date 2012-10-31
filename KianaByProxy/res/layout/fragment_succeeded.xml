@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/succeededfrag" >
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:text="@string/succeeded_description"
+        android:textSize="16dp" />
+    
+    <TextView
+        android:id="@+id/back_from_success"
+        android:clickable="true"
+        android:textColor="@color/link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/description"
+        android:textSize="16dp"
+        android:text="@string/back_to_main" />
+
+</RelativeLayout>

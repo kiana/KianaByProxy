@@ -4,7 +4,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -28,137 +28,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".youtube.YoutubeActivity"
-            android:exported="false"
-            android:label="@string/title_activity_youtube" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".flickr.FlickrActivity"
-            android:exported="false"
-            android:label="@string/title_activity_flickr" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".twitter.TwitterActivity"
-            android:exported="false"
-            android:label="@string/title_activity_twitter" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".blogger.BloggerActivity"
-            android:exported="false"
-            android:label="@string/title_activity_blogger" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".FoursquareActivity"
-            android:exported="false"
-            android:label="@string/title_activity_foursquare" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".flickr.ShowPhotoActivity"
-            android:exported="false"
-            android:label="@string/title_activity_flickr" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".blogger.ShowBlogEntryActivity"
-            android:exported="false"
-            android:label="@string/title_activity_show_blog_entry" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".paypal.DonateActivity"
-            android:exported="false"
-            android:label="@string/title_activity_paypal" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.paypal.android.MEP.PayPalActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" />
-        <activity
-            android:name=".paypal.CancelledActivity"
-            android:exported="false"
-            android:label="@string/title_activity_paypal" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".paypal.SucceededActivity"
-            android:exported="false"
-            android:label="@string/title_activity_paypal" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".paypal.FailedActivity"
-            android:exported="false"
-            android:label="@string/title_activity_paypal" >
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".youtube.ExtendedYouTubePlayerActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
+        
+                <activity  
+                android:name=".OpenYouTubePlayerActivity"  
+                android:screenOrientation="landscape"
+                android:configChanges="orientation"
+                android:theme="@android:style/Theme.Black"
+                android:label="@string/app_name">  
         </activity>
     </application>
 

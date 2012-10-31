@@ -1,6 +1,6 @@
 package com.kt.kbp.tracker;
 
-import com.kt.kbp.activitypath.ActivityPath;
+import com.kt.kbp.path.Path;
 
 public class PathTracker {
 
@@ -17,7 +17,7 @@ public class PathTracker {
 		return INSTANCE;
 	}
 	
-	public void add(ActivityPath page) {
+	public void add(Path page) {
 		if (path == null) {
 			path = new StringBuilder(page.toString());
 		}

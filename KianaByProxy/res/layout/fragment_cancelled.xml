@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/cancelledfrag">
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_medium"
+        android:textSize="16dp"
+        android:text="@string/cancelled_description" />
+    
+    <LinearLayout 
+		android:layout_below="@id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+            <TextView
+		        android:id="@+id/back_to_main"
+		        android:clickable="true"
+		        android:textColor="@color/link"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:padding="10dp"
+		        android:textSize="16dp"
+		        android:text="@string/back_to_main" />
+		        
+		    <TextView 
+		        android:id="@+id/donate"
+		        android:clickable="true"
+		        android:textColor="@color/link"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:padding="10dp"
+		        android:textSize="16dp"
+		        android:text="@string/title_activity_paypal"/>
+    </LinearLayout>
+
+        
+
+</RelativeLayout>
