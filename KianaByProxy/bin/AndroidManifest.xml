@@ -29,13 +29,8 @@
             </intent-filter>
         </activity>
         
-                <activity  
-                android:name=".OpenYouTubePlayerActivity"  
-                android:screenOrientation="landscape"
-                android:configChanges="orientation"
-                android:theme="@android:style/Theme.Black"
-                android:label="@string/app_name">  
-        </activity>
+        <activity android:screenOrientation="landscape"
+            android:name="com.keyes.youtube.OpenYouTubePlayerActivity"/>  
     </application>
 
 </manifest>

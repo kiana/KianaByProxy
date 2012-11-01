@@ -6,9 +6,6 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.Intent;
@@ -20,12 +17,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -39,27 +34,10 @@ import com.kt.kbp.path.PathInterface;
 
 public class YoutubeFragment extends ListFragment  implements ExceptionTrackerInterface, PathInterface {
 
-	private View view;
-	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	view = inflater.inflate(R.layout.fragment_youtube, container, false);
-    	
-        TextView back = (TextView) view.findViewById(R.id.back);
-        back.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				FragmentManager fm = getActivity().getFragmentManager();
-				FragmentTransaction transaction = fm.beginTransaction();
-				Fragment mainFragment = fm.findFragmentByTag(Constants.MAIN_FRAG);
-				transaction.show(mainFragment);
-				transaction.hide(fm.findFragmentByTag(Constants.YOUTUBE_FRAG));
-				transaction.commit();
-			}
-		});
-    	
-    	return view;
+    	return inflater.inflate(R.layout.fragment_youtube, container, false);
     }
     
     
@@ -75,7 +53,7 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     }
     
     protected boolean isConnected(int connectionType) {
-    	ConnectivityManager connectivityManager = (ConnectivityManager) view.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+    	ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
     	NetworkInfo networkInfo = connectivityManager.getNetworkInfo(connectionType);
     	return networkInfo != null && networkInfo.isConnected();
     }
@@ -83,16 +61,18 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     protected void playVideo(String youtubeId) {
     	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
     		GoogleAnalyticsTracker.getInstance().trackEvent("Youtube", "Watch", youtubeId, 0);
-            startActivity(useOpenSourcePlayer(youtubeId));
+            
+            Intent intent = useOpenSourcePlayer(youtubeId);
+            startActivity(intent);
     	} else {
-    		Toast.makeText(view.getContext(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
+    		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
     	}
     }
     
     protected Intent useOpenSourcePlayer(String youtubeId) {
     	//TODO log activity in PathTracker
     	//TODO turn Activity into a Fragment
-    	return new Intent(null, Uri.parse("ytv://"+youtubeId), view.getContext(), OpenYouTubePlayerActivity.class);
+    	return new Intent(null, Uri.parse("ytv://"+youtubeId), getActivity(), OpenYouTubePlayerActivity.class);
     }
     
     /*
@@ -141,7 +121,7 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     
     protected void loadListAdapter(List<YoutubeEntry> entries) {
 		final ListView listView = getListView();
-		VideoListAdapter adapter = new VideoListAdapter(view.getContext(), R.layout.youtube_row, entries);
+		VideoListAdapter adapter = new VideoListAdapter(getActivity(), R.layout.youtube_row, entries);
 		listView.setAdapter(adapter);
 		
 		listView.setOnItemClickListener(new OnItemClickListener() {
