@@ -1,7 +1,6 @@
 package com.kt.kbp.paypal;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +29,7 @@ public class FailedFragment extends Fragment implements PathInterface {
         back.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack(Constants.MAIN_FRAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				getFragmentManager().popBackStack(Constants.MAIN_FRAG, 0);
 			}
 		});
         
@@ -44,7 +43,7 @@ public class FailedFragment extends Fragment implements PathInterface {
 					fragment = new PaypalFragment();
 				}
 				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-				transaction.replace(R.id.fragment_frame, fragment);
+				transaction.replace(Constants.CONTENT_VIEW_ID, fragment);
 				transaction.addToBackStack(null);
 				transaction.commit();
 			}

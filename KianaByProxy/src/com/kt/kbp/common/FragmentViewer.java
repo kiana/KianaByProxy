@@ -20,7 +20,7 @@ public class FragmentViewer {
 			fragment = FragmentFactory.getNewFragment(id);
 		}
 
-		transaction.replace(R.id.fragment_frame, fragment, tag);
+		transaction.replace(Constants.CONTENT_VIEW_ID, fragment, tag);
 		transaction.commit();
 	}
 	

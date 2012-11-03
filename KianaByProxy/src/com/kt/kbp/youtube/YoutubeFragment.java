@@ -6,25 +6,21 @@ import java.util.List;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.keyes.youtube.OpenYouTubePlayerActivity;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.ExceptionTrackerInterface;
@@ -34,6 +30,8 @@ import com.kt.kbp.path.PathInterface;
 
 public class YoutubeFragment extends ListFragment  implements ExceptionTrackerInterface, PathInterface {
 
+	private OnVideoSelectedListener videoSelectedListener;
+	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
@@ -48,6 +46,28 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     	loadVideos(Constants.YOUTUBE_URL);
     }
     
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	try {
+    		videoSelectedListener = (OnVideoSelectedListener) activity;
+    	} catch (ClassCastException e) {
+    		throw new ClassCastException(activity.toString() + " must implement OnVideoSelectedListener");
+    	}
+    }
+    
+    @Override
+    public void onListItemClick(ListView listView, View v, int position, long id) {
+    	YoutubeEntry entry = (YoutubeEntry) listView.getItemAtPosition(position);
+    	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
+    		GoogleAnalyticsTracker.getInstance().trackEvent("Youtube", "Click|Video", entry.getId(), 0);
+        	videoSelectedListener.onVideoSelected(entry.getId());
+    	} else {
+    		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
+    	}
+    }
+    
     public void loadVideos(String url) {
     	new ParseYoutubeFeedTask().execute(url);
     }
@@ -56,30 +76,6 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     	ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
     	NetworkInfo networkInfo = connectivityManager.getNetworkInfo(connectionType);
     	return networkInfo != null && networkInfo.isConnected();
-    }
-    
-    protected void playVideo(String youtubeId) {
-    	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
-    		GoogleAnalyticsTracker.getInstance().trackEvent("Youtube", "Watch", youtubeId, 0);
-            
-            Intent intent = useOpenSourcePlayer(youtubeId);
-            startActivity(intent);
-    	} else {
-    		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
-    	}
-    }
-    
-    protected Intent useOpenSourcePlayer(String youtubeId) {
-    	//TODO log activity in PathTracker
-    	//TODO turn Activity into a Fragment
-    	return new Intent(null, Uri.parse("ytv://"+youtubeId), getActivity(), OpenYouTubePlayerActivity.class);
-    }
-    
-    /*
-     * In case the other player breaks, use this.
-     */
-    protected Intent useYoutubePlayer(String youtubeId) {
-    	return new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + youtubeId));
     }
 
     private class ParseYoutubeFeedTask extends AsyncTask<String, Void, List<YoutubeEntry>> {
@@ -123,15 +119,6 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
 		final ListView listView = getListView();
 		VideoListAdapter adapter = new VideoListAdapter(getActivity(), R.layout.youtube_row, entries);
 		listView.setAdapter(adapter);
-		
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				YoutubeEntry entry = (YoutubeEntry) listView.getItemAtPosition(position);
-				GoogleAnalyticsTracker.getInstance().trackEvent("Youtube", "Click|Video", entry.getId(), 0);
-				playVideo(entry.getId());
-			}
-		});
     }
     
 	@Override
@@ -144,5 +131,8 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
 		//category, action, label, value
 		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
-
+	
+	public interface OnVideoSelectedListener {
+		public void onVideoSelected(String youtubeId);
+	}
 }

@@ -106,8 +106,8 @@ public class MainFragment extends Fragment implements PathInterface {
 			fragment = FragmentFactory.getNewFragment(id);
 		}
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_frame, fragment, tag);
-		transaction.addToBackStack(null);
+		transaction.replace(Constants.CONTENT_VIEW_ID, fragment, tag);
+		transaction.addToBackStack(tag);
 		transaction.commit();
 	}
 

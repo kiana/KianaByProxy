@@ -1,7 +1,6 @@
 package com.kt.kbp.paypal;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +27,7 @@ public class SucceededFragment extends Fragment implements PathInterface {
         backToMain.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack(Constants.MAIN_FRAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+				getFragmentManager().popBackStack(Constants.MAIN_FRAG, 0);
 			}
 		});
         

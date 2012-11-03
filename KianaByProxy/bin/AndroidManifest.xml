@@ -28,9 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity android:screenOrientation="landscape"
-            android:name="com.keyes.youtube.OpenYouTubePlayerActivity"/>  
+            
+        <activity 
+            android:screenOrientation="portrait"
+            android:name="com.paypal.android.MEP.PayPalActivity" />
     </application>
 
 </manifest>
