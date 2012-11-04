@@ -55,7 +55,7 @@ public class FailedFragment extends Fragment implements PathInterface {
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming FailedFragment");
+    	Log.i("fragments", "onResume: FailedFragment");
     }
     
 	@Override

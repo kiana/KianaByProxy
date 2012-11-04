@@ -27,6 +27,7 @@ public class MainFragment extends Fragment implements PathInterface {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
+    	
     	view = inflater.inflate(R.layout.fragment_main, container, false);
         hapticFeedback = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         
@@ -92,7 +93,7 @@ public class MainFragment extends Fragment implements PathInterface {
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming MainFragment");
+    	Log.i("fragments", "onResume: MainFragment");
     }
 
 	@Override
@@ -110,5 +111,4 @@ public class MainFragment extends Fragment implements PathInterface {
 		transaction.addToBackStack(tag);
 		transaction.commit();
 	}
-
 }

@@ -37,7 +37,7 @@ public class SucceededFragment extends Fragment implements PathInterface {
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming SucceededFragment");
+    	Log.i("fragments", "onResume: SucceededFragment");
     }
     
     

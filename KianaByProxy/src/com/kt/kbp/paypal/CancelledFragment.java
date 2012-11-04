@@ -56,7 +56,7 @@ public class CancelledFragment extends Fragment implements PathInterface {
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming CancelledFragment");
+    	Log.i("fragments", "onResume: CancelledFragment");
     }
     
 	@Override

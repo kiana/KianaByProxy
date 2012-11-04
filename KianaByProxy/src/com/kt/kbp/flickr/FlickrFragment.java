@@ -61,7 +61,7 @@ public class FlickrFragment extends Fragment implements ExceptionTrackerInterfac
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming FlickrFragment");
+    	Log.i("fragments", "onResume: FlickrFragment");
     }
     
 	@Override

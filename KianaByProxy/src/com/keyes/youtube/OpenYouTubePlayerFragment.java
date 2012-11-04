@@ -95,6 +95,7 @@ public class OpenYouTubePlayerFragment extends Fragment {
     @Override
     public void onResume() {
     	super.onResume();
+    	Log.i("fragments", "onResume: OpenYoutubePlayerFragment");
 		// extract the playlist or video id from the intent that started this video
 		
 		Uri lVideoIdUri = getActivity().getIntent().getData();

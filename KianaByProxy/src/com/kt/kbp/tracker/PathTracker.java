@@ -38,4 +38,20 @@ public class PathTracker {
 	public void clearPath() {
 		path = null;
 	}
+	
+	/**
+	 * This method ensures the path contains more than MainActivity and MainFragment info
+	 * @return
+	 */
+	public boolean containsData() {
+		return false;
+	}
+	
+	/**
+	 * This method returns true if the user has navigated to more than one page.
+	 * @return
+	 */
+	public boolean trackingCount() {
+		return false;
+	}
 }

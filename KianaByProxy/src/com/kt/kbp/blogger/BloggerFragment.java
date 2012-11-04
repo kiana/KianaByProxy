@@ -43,7 +43,7 @@ public class BloggerFragment extends ListFragment implements ExceptionTrackerInt
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming BloggerFragment");
+    	Log.i("fragments", "onResume: BloggerFragment");
     	new GetBlogEntriesTask().execute(Constants.BLOGGER_URL);
     }
     

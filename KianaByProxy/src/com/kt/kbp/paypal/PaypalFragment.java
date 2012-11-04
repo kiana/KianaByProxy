@@ -41,7 +41,7 @@ public class PaypalFragment extends Fragment implements ExceptionTrackerInterfac
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming PaypalFragment");
+    	Log.i("fragments", "onResume: PaypalFragment");
         PayPal payPalObject = PayPal.initWithAppID(getActivity(), Constants.PAYPAL_SANDBOX, PayPal.ENV_SANDBOX);
         //PayPal payPalObject = PayPal.initWithAppID(this, Constants.PAYPAL_LIVE, PayPal.ENV_LIVE);
         getCheckoutButton(payPalObject);

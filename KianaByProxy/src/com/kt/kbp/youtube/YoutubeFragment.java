@@ -42,7 +42,7 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming YoutubeFragment");
+    	Log.i("fragments", "onResume: YoutubeFragment");
     	loadVideos(Constants.YOUTUBE_URL);
     }
     

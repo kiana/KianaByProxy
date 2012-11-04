@@ -43,7 +43,7 @@ public class ShowBlogEntryFragment extends Fragment  implements PathInterface {
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming ShowBlogEntryFragment");
+    	Log.i("fragments", "onResume: ShowBlogEntryFragment");
     }
     
 	@Override

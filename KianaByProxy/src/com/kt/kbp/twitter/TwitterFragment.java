@@ -44,7 +44,7 @@ public class TwitterFragment extends ListFragment implements ExceptionTrackerInt
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming TwitterFragment");
+    	Log.i("fragments", "onResume: TwitterFragment");
         new GetTimelineTask().execute();
         new GetUserTask().execute();
     }

@@ -47,7 +47,7 @@ public class ShowPhotoFragment extends Fragment  implements ExceptionTrackerInte
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "resuming ShowPhotoFragment");
+    	Log.i("fragments", "onResume: ShowPhotoFragment");
     }
 
     public String getPhotoId() {
