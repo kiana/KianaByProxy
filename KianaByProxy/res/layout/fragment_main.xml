@@ -87,6 +87,6 @@
         		android:textSize="16dp"
 	        	android:padding="@dimen/padding_medium"
 	        	android:text="@string/charity_name" /> 	        
-	    </TableRow>    	
+	    </TableRow> 
 </TableLayout>
 

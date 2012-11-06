@@ -3,7 +3,6 @@ package com.kt.kbp.blogger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
@@ -14,10 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kt.kbp.R;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class ShowBlogEntryFragment extends Fragment  implements PathInterface {
+public class ShowBlogEntryFragment extends GoogleAnalyticsFragment  implements PathInterface {
 	
 	private View view;
 	

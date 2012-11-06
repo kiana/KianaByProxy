@@ -7,7 +7,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
-import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +20,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.ExceptionTrackerInterface;
 import com.kt.kbp.common.StreamDrawableTask;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class TwitterFragment extends ListFragment implements ExceptionTrackerInterface, PathInterface {
+public class TwitterFragment extends GoogleAnalyticsListFragment implements PathInterface {
 
 	private Twitter twitter = new TwitterFactory(new ConfigurationBuilder().build()).getInstance();
 	private View view;
@@ -111,7 +109,7 @@ public class TwitterFragment extends ListFragment implements ExceptionTrackerInt
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Status status = (Status)listView.getItemAtPosition(position);
-				GoogleAnalyticsTracker.getInstance().trackEvent("Twitter", "Click|Tweet", Long.toString(status.getId()), 0);
+				trackEvent("Twitter", "Click|Tweet", Long.toString(status.getId()), 0);
 			}
     	});
     }
@@ -119,11 +117,6 @@ public class TwitterFragment extends ListFragment implements ExceptionTrackerInt
 	@Override
 	public Path getPath() {
 		return Path.TWITTER;
-	}
-
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
 	
 }

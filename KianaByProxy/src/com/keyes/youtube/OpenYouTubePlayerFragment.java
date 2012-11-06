@@ -1,11 +1,7 @@
 package com.keyes.youtube;
 
-import com.kt.kbp.R;
-import com.kt.kbp.common.Constants;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +22,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
-public class OpenYouTubePlayerFragment extends Fragment {
+import com.kt.kbp.R;
+import com.kt.kbp.common.Constants;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
+
+public class OpenYouTubePlayerFragment extends GoogleAnalyticsFragment {
 	public static final String SCHEME_YOUTUBE_VIDEO = "ytv";
 	public static final String SCHEME_YOUTUBE_PLAYLIST = "ytpl";
 	

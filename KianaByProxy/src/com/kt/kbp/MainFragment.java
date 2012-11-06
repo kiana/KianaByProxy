@@ -1,10 +1,10 @@
 package com.kt.kbp;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.FragmentFactory;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class MainFragment extends Fragment implements PathInterface {
+public class MainFragment extends GoogleAnalyticsFragment implements PathInterface {
 
 	private Vibrator hapticFeedback;
 	private View view;
@@ -36,7 +36,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			@Override
 			public void onClick(View view) {
 				//category, action, label, value
-				GoogleAnalyticsTracker.getInstance().trackEvent("Main", "Youtube", "Click", 0);
+				trackEvent("Main", "Youtube", "Click", 0);
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.YOUTUBE_FRAG, R.id.youtubefrag);
 			}
@@ -47,8 +47,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			@Override
 			public void onClick(View view) {
 				//category, action, label, value
-				GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
-				tracker.trackEvent("Main", "Flickr", "Click", 0);
+				trackEvent("Main", "Flickr", "Click", 0);
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.FLICKR_FRAG, R.id.flickrfrag);
 			}
@@ -59,7 +58,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			@Override
 			public void onClick(View view) {
 				//category, action, label, value
-				GoogleAnalyticsTracker.getInstance().trackEvent("Main", "Twitter", "Click", 0);
+				trackEvent("Main", "Twitter", "Click", 0);
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.TWITTER_FRAG, R.id.twitterfrag);
 			}
@@ -70,7 +69,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			@Override
 			public void onClick(View view) {
 				//category, action, label, value
-				GoogleAnalyticsTracker.getInstance().trackEvent("Main", "Blogger", "Click", 0);
+				trackEvent("Main", "Blogger", "Click", 0);
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.BLOGGER_FRAG, R.id.bloggerfrag);
 			}
@@ -81,7 +80,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			@Override
 			public void onClick(View view) {
 				//category, action, label, value
-				GoogleAnalyticsTracker.getInstance().trackEvent("Main", "Charity", "Click", 0);
+				trackEvent("Main", "Charity", "Click", 0);
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.PAYPAL_FRAG, R.id.paypalfrag);
 			}
@@ -107,7 +106,7 @@ public class MainFragment extends Fragment implements PathInterface {
 			fragment = FragmentFactory.getNewFragment(id);
 		}
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(Constants.CONTENT_VIEW_ID, fragment, tag);
+		transaction.replace(R.id.fragment_frame, fragment, tag);
 		transaction.addToBackStack(tag);
 		transaction.commit();
 	}

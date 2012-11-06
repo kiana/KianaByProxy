@@ -22,5 +22,4 @@
         android:layout_below="@id/description"
         android:textSize="16dp"
         android:text="@string/back_to_main" />
-
 </RelativeLayout>

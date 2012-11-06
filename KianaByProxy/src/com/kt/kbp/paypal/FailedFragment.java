@@ -1,8 +1,8 @@
 package com.kt.kbp.paypal;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +10,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class FailedFragment extends Fragment implements PathInterface {
+public class FailedFragment extends GoogleAnalyticsFragment implements PathInterface {
 
 	private View view;
 	
@@ -37,13 +37,13 @@ public class FailedFragment extends Fragment implements PathInterface {
         donate.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				GoogleAnalyticsTracker.getInstance().trackEvent("Paypal", "Donate", "From Failed", 0);
+				trackEvent("Paypal", "Donate", "From Failed", 0);
 				Fragment fragment = getFragmentManager().findFragmentByTag("donate");
 				if (fragment == null) {
 					fragment = new PaypalFragment();
 				}
 				FragmentTransaction transaction = getFragmentManager().beginTransaction();
-				transaction.replace(Constants.CONTENT_VIEW_ID, fragment);
+				transaction.replace(R.id.fragment_frame, fragment);
 				transaction.addToBackStack(null);
 				transaction.commit();
 			}

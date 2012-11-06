@@ -40,7 +40,4 @@
 		        android:textSize="16dp"
 		        android:text="@string/title_activity_paypal"/>
     </LinearLayout>
-
-        
-
 </RelativeLayout>

@@ -7,7 +7,6 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,15 +19,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.ExceptionTrackerInterface;
 import com.kt.kbp.common.UrlConverter;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class YoutubeFragment extends ListFragment  implements ExceptionTrackerInterface, PathInterface {
+public class YoutubeFragment extends GoogleAnalyticsListFragment  implements PathInterface {
 
 	private OnVideoSelectedListener videoSelectedListener;
 	
@@ -61,7 +59,7 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
     public void onListItemClick(ListView listView, View v, int position, long id) {
     	YoutubeEntry entry = (YoutubeEntry) listView.getItemAtPosition(position);
     	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
-    		GoogleAnalyticsTracker.getInstance().trackEvent("Youtube", "Click|Video", entry.getId(), 0);
+    		trackEvent("Youtube", "Click|Video", entry.getId(), 0);
         	videoSelectedListener.onVideoSelected(entry.getId());
     	} else {
     		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
@@ -124,12 +122,6 @@ public class YoutubeFragment extends ListFragment  implements ExceptionTrackerIn
 	@Override
 	public Path getPath() {		
 		return Path.YOUTUBE;
-	}
-
-	@Override
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
 	
 	public interface OnVideoSelectedListener {

@@ -8,7 +8,6 @@ import java.util.List;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,15 +18,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.ExceptionTrackerInterface;
 import com.kt.kbp.common.UrlConverter;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class BloggerFragment extends ListFragment implements ExceptionTrackerInterface, PathInterface {
+public class BloggerFragment extends GoogleAnalyticsListFragment implements PathInterface {
 
 	private View view;
 	private OnBlogEntrySelectedListener blogEntrySelectedListener;
@@ -125,11 +123,6 @@ public class BloggerFragment extends ListFragment implements ExceptionTrackerInt
 	@Override
 	public Path getPath() {
 		return Path.BLOGGER;
-	}
-
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
 	
 	public interface OnBlogEntrySelectedListener {

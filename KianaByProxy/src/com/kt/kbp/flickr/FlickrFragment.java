@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.json.JSONException;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,15 +19,14 @@ import com.gmail.yuyang226.flickr.Flickr;
 import com.gmail.yuyang226.flickr.FlickrException;
 import com.gmail.yuyang226.flickr.photos.Photo;
 import com.gmail.yuyang226.flickr.photos.PhotoList;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.ExceptionTrackerInterface;
 import com.kt.kbp.flickr.ShowPhotoFragment.OnPhotoSelectedListener;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class FlickrFragment extends Fragment implements ExceptionTrackerInterface, PathInterface {
+public class FlickrFragment extends GoogleAnalyticsFragment implements PathInterface {
 
 	private View view;
 	private GridView gridView;
@@ -67,11 +65,6 @@ public class FlickrFragment extends Fragment implements ExceptionTrackerInterfac
 	@Override
 	public Path getPath() {
 		return Path.FLICKR;
-	}
-
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
 
     private class StreamPhotoListTask extends AsyncTask<Void, Void, PhotoList> {

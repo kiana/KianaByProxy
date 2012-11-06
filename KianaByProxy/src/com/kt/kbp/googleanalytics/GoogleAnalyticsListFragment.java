@@ -1,6 +1,6 @@
 package com.kt.kbp.googleanalytics;
 
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
@@ -10,7 +10,7 @@ import com.kt.kbp.path.PathInterface;
 import com.kt.kbp.tracker.PathTracker;
 import com.kt.kbp.tracker.SessionTracker;
 
-public class GoogleAnalyticsFragment extends Fragment implements PathInterface {
+public class GoogleAnalyticsListFragment extends ListFragment implements PathInterface {
 
 	protected PathTracker pathTracker;
 	protected SessionTracker sessionTracker;

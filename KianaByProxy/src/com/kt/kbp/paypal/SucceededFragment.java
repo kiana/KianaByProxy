@@ -1,6 +1,5 @@
 package com.kt.kbp.paypal;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +10,11 @@ import android.widget.TextView;
 
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class SucceededFragment extends Fragment implements PathInterface {
+public class SucceededFragment extends GoogleAnalyticsFragment implements PathInterface {
 
 	private View view;
 	

@@ -3,7 +3,6 @@ package com.kt.kbp.paypal;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +12,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.apps.analytics.Transaction;
 import com.google.android.apps.analytics.Transaction.Builder;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.ExceptionTrackerInterface;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 import com.paypal.android.MEP.CheckoutButton;
@@ -28,7 +26,7 @@ import com.paypal.android.MEP.PayPalInvoiceItem;
 import com.paypal.android.MEP.PayPalPayment;
 import com.paypal.android.MEP.PayPalResultDelegate;
 
-public class PaypalFragment extends Fragment implements ExceptionTrackerInterface, PayPalResultDelegate, PathInterface, Serializable {
+public class PaypalFragment extends GoogleAnalyticsFragment implements PayPalResultDelegate, PathInterface, Serializable {
 
 	private static final long serialVersionUID = 6847175698452844410L;
 	
@@ -59,7 +57,7 @@ public class PaypalFragment extends Fragment implements ExceptionTrackerInterfac
     }
     
     public void payPalButtonClick() {
-    	GoogleAnalyticsTracker.getInstance().trackEvent("Paypal", "PayPalButton", "Click", 0);
+    	trackEvent("Paypal", "PayPalButton", "Click", 0);
 		
 		PayPalPayment payment = new PayPalPayment();
 
@@ -88,16 +86,14 @@ public class PaypalFragment extends Fragment implements ExceptionTrackerInterfac
 	@Override
 	public void onPaymentCanceled(String paymentStatus) {
 		Log.i("fragments", "paypal cancelled: " + paymentStatus);
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent("Paypal", "Canceled", paymentStatus, 0);
+		trackEvent("Paypal", "Canceled", paymentStatus, 0);
 	}
 
 	@Override
 	public void onPaymentFailed(String paymentStatus, String correlationId, String payKey,
 			String errorId, String errorMessage) {
 		Log.i("fragments", "paypal failed: " + paymentStatus);
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent("Paypal", "Failed", errorId + "|" + errorMessage, 0);
+		trackEvent("Paypal", "Failed", errorId + "|" + errorMessage, 0);
 	}
 
 	@Override
@@ -109,18 +105,12 @@ public class PaypalFragment extends Fragment implements ExceptionTrackerInterfac
 		builder.setStoreName("KianaByProxy");
 		Transaction transaction = builder.build();
 		
-		GoogleAnalyticsTracker.getInstance().addTransaction(transaction);
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent("Paypal", "Succeeded", paymentStatus, 0);
+		trackTransaction(transaction);
+		trackEvent("Paypal", "Succeeded", paymentStatus, 0);
 	}
 	
 	@Override
 	public Path getPath() {
 		return Path.DONATE;
-	}
-	
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
 	}
 }

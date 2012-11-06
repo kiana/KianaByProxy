@@ -2,7 +2,6 @@ package com.kt.kbp.flickr;
 
 import java.net.MalformedURLException;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,14 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gmail.yuyang226.flickr.photos.Photo;
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.R;
-import com.kt.kbp.common.ExceptionTrackerInterface;
 import com.kt.kbp.common.StreamDrawableTask;
+import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
 import com.kt.kbp.path.Path;
 import com.kt.kbp.path.PathInterface;
 
-public class ShowPhotoFragment extends Fragment  implements ExceptionTrackerInterface, PathInterface {
+public class ShowPhotoFragment extends GoogleAnalyticsFragment implements PathInterface {
 
 	private View view;
 	
@@ -61,7 +59,7 @@ public class ShowPhotoFragment extends Fragment  implements ExceptionTrackerInte
 	
 	public void trackException(String category, String message) {
 		//category, action, label, value
-		GoogleAnalyticsTracker.getInstance().trackEvent(category, "Exception", message, 0);
+		trackEvent(category, "Exception", message, 0);
 	}
 	
 	public interface OnPhotoSelectedListener {
