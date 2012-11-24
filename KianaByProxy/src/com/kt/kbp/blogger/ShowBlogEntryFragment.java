@@ -6,7 +6,6 @@ import java.util.Date;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +13,14 @@ import android.widget.TextView;
 
 import com.kt.kbp.R;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class ShowBlogEntryFragment extends GoogleAnalyticsFragment  implements PathInterface {
-	
-	private View view;
+public class ShowBlogEntryFragment extends GoogleAnalyticsFragment {
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	
-    	view = inflater.inflate(R.layout.fragment_show_blog_entry, container, false);
+    	View view = inflater.inflate(R.layout.fragment_show_blog_entry, container, false);
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView date = (TextView) view.findViewById(R.id.date_published);
         TextView content = (TextView) view.findViewById(R.id.content);
@@ -39,17 +34,6 @@ public class ShowBlogEntryFragment extends GoogleAnalyticsFragment  implements P
         
     	return view;
     }
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	Log.i("fragments", "onResume: ShowBlogEntryFragment");
-    }
-    
-	@Override
-	public Path getPath() {
-		return Path.SHOWPHOTO;
-	}
 	
 	private String formatDate(Date date) {
 	SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");

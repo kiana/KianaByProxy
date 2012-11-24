@@ -3,7 +3,6 @@ package com.kt.kbp.flickr;
 import java.net.MalformedURLException;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +14,13 @@ import com.gmail.yuyang226.flickr.photos.Photo;
 import com.kt.kbp.R;
 import com.kt.kbp.common.StreamDrawableTask;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class ShowPhotoFragment extends GoogleAnalyticsFragment implements PathInterface {
+public class ShowPhotoFragment extends GoogleAnalyticsFragment {
 
-	private View view;
-	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	view = inflater.inflate(R.layout.fragment_show_photo, container, false);
+    	View view = inflater.inflate(R.layout.fragment_show_photo, container, false);
     	
     	Bundle bundle = getArguments();
         TextView title = (TextView) view.findViewById(R.id.flickr_label);
@@ -41,27 +36,11 @@ public class ShowPhotoFragment extends GoogleAnalyticsFragment implements PathIn
         
     	return view;
     }
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	Log.i("fragments", "onResume: ShowPhotoFragment");
-    }
 
     public String getPhotoId() {
     	return getArguments().getString("id");
     }
     
-	@Override
-	public Path getPath() {
-		return Path.SHOWPHOTO;
-	}
-	
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		trackEvent(category, "Exception", message, 0);
-	}
-	
 	public interface OnPhotoSelectedListener {
 		void onPhotoSelected(Photo photo);
 	}

@@ -7,7 +7,6 @@ import org.json.JSONException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,19 +22,16 @@ import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.flickr.ShowPhotoFragment.OnPhotoSelectedListener;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class FlickrFragment extends GoogleAnalyticsFragment implements PathInterface {
+public class FlickrFragment extends GoogleAnalyticsFragment {
 
-	private View view;
 	private GridView gridView;
 	private OnPhotoSelectedListener photoSelectedListener;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	view = inflater.inflate(R.layout.fragment_flickr, container, false);
+    	View view = inflater.inflate(R.layout.fragment_flickr, container, false);
         gridView = (GridView) view.findViewById(R.id.gridview);
     	return view;
     }
@@ -55,17 +51,6 @@ public class FlickrFragment extends GoogleAnalyticsFragment implements PathInter
         super.onActivityCreated(savedInstanceState);
     	new StreamPhotoListTask().execute();
     }
-
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	Log.i("fragments", "onResume: FlickrFragment");
-    }
-    
-	@Override
-	public Path getPath() {
-		return Path.FLICKR;
-	}
 
     private class StreamPhotoListTask extends AsyncTask<Void, Void, PhotoList> {
     	
@@ -109,6 +94,8 @@ public class FlickrFragment extends GoogleAnalyticsFragment implements PathInter
     
     public void onGridItemClick(GridView gridView, View v, int position, long id) {
     	Photo photo = (Photo) gridView.getItemAtPosition(position);
+		trackPageView("/photo" + photo.getId());
+		trackerUpdate("photo:" + photo.getId());
     	photoSelectedListener.onPhotoSelected(photo);
     }
 }

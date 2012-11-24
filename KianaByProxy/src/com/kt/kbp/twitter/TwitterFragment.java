@@ -9,7 +9,6 @@ import twitter4j.User;
 import twitter4j.conf.ConfigurationBuilder;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,25 +23,21 @@ import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.StreamDrawableTask;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class TwitterFragment extends GoogleAnalyticsListFragment implements PathInterface {
+public class TwitterFragment extends GoogleAnalyticsListFragment {
 
 	private Twitter twitter = new TwitterFactory(new ConfigurationBuilder().build()).getInstance();
-	private View view;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	view = inflater.inflate(R.layout.fragment_twitter, container, false);
+    	View view = inflater.inflate(R.layout.fragment_twitter, container, false);
     	return view;
     }
     
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "onResume: TwitterFragment");
         new GetTimelineTask().execute();
         new GetUserTask().execute();
     }
@@ -67,13 +62,13 @@ public class TwitterFragment extends GoogleAnalyticsListFragment implements Path
     protected void setUserInfo(User user) {
     	if (user != null) {
     		
-        	ImageView imageView = (ImageView) view.findViewById(R.id.twitter_image);
+        	ImageView imageView = (ImageView) getActivity().findViewById(R.id.twitter_image);
         	new StreamDrawableTask(user.getProfileImageURL()).execute(imageView);
         	
-        	TextView handle = (TextView) view.findViewById(R.id.handle);
+        	TextView handle = (TextView) getActivity().findViewById(R.id.handle);
         	handle.setText("@" + user.getScreenName());
         	
-        	TextView description = (TextView) view.findViewById(R.id.description);
+        	TextView description = (TextView) getActivity().findViewById(R.id.description);
         	description.setText(user.getDescription());
     	}
     }
@@ -97,26 +92,22 @@ public class TwitterFragment extends GoogleAnalyticsListFragment implements Path
     }
 
     protected void hideProgressBar() {
-    	ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-    	progressBar.setVisibility(View.GONE);
+    	ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
+    	if (progressBar != null) {
+    		progressBar.setVisibility(View.GONE);
+    	}
     }
     
     protected void loadListAdapter(ResponseList<Status> statuses) {
     	final ListView listView = getListView();
-    	TwitterFeedAdapter adapter = new TwitterFeedAdapter(view.getContext(), R.layout.twitter_row, statuses);
+    	TwitterFeedAdapter adapter = new TwitterFeedAdapter(getActivity(), R.layout.twitter_row, statuses);
     	listView.setAdapter(adapter);
     	listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Status status = (Status)listView.getItemAtPosition(position);
-				trackEvent("Twitter", "Click|Tweet", Long.toString(status.getId()), 0);
+				trackEvent("Twitter", "Click", Long.toString(status.getId()), 0);
 			}
     	});
     }
-    
-	@Override
-	public Path getPath() {
-		return Path.TWITTER;
-	}
-	
 }

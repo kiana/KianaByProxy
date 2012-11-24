@@ -1,11 +1,12 @@
 package com.kt.kbp.tracker;
 
-import com.kt.kbp.path.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PathTracker {
 
-	private StringBuilder path;
 	private static PathTracker INSTANCE;
+	private List<String> path;
 	
 	private PathTracker() {
 	}
@@ -17,26 +18,33 @@ public class PathTracker {
 		return INSTANCE;
 	}
 	
-	public void add(Path page) {
+	public void add(String page) {
 		if (path == null) {
-			path = new StringBuilder(page.toString());
+			path = new ArrayList<String>();
 		}
 		else {
-			path.append("|")
-				.append(page);
+			path.add(page);
 		}
 	}
 	
-	public String getPath() {
-		return path.toString();
+	public List<String> getPath() {
+		return path;
+	}
+	
+	public CharSequence[] getPathAsCharSequence() {
+		if (hasPathData()) {
+			return path.toArray(new CharSequence[path.size()]);
+		} else { 
+			return new CharSequence[0];
+		}
 	}
 	
 	public boolean hasPathData() {
-		return path != null;
+		return path != null && path.size() > 0;
 	}
 	
 	public void clearPath() {
-		path = null;
+		path = new ArrayList<String>();
 	}
 	
 	/**

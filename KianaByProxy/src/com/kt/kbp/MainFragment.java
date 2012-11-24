@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,27 +15,23 @@ import android.widget.TextView;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.FragmentFactory;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class MainFragment extends GoogleAnalyticsFragment implements PathInterface {
+public class MainFragment extends GoogleAnalyticsFragment {
 
 	private Vibrator hapticFeedback;
-	private View view;
-		
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	
-    	view = inflater.inflate(R.layout.fragment_main, container, false);
-        hapticFeedback = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+    	View view = inflater.inflate(R.layout.fragment_main, container, false);
+        hapticFeedback = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         
         ImageView youtubeView = (ImageView) view.findViewById(R.id.img_youtube);
         youtubeView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//category, action, label, value
-				trackEvent("Main", "Youtube", "Click", 0);
+				trackPageView("/youtube");
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.YOUTUBE_FRAG, R.id.youtubefrag);
 			}
@@ -46,8 +41,7 @@ public class MainFragment extends GoogleAnalyticsFragment implements PathInterfa
         flickrView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//category, action, label, value
-				trackEvent("Main", "Flickr", "Click", 0);
+				trackPageView("/flickr");
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.FLICKR_FRAG, R.id.flickrfrag);
 			}
@@ -57,8 +51,7 @@ public class MainFragment extends GoogleAnalyticsFragment implements PathInterfa
         twitterView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//category, action, label, value
-				trackEvent("Main", "Twitter", "Click", 0);
+				trackPageView("/twitter");
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.TWITTER_FRAG, R.id.twitterfrag);
 			}
@@ -68,8 +61,7 @@ public class MainFragment extends GoogleAnalyticsFragment implements PathInterfa
         bloggerView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//category, action, label, value
-				trackEvent("Main", "Blogger", "Click", 0);
+				trackPageView("/blogger");
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.BLOGGER_FRAG, R.id.bloggerfrag);
 			}
@@ -79,8 +71,7 @@ public class MainFragment extends GoogleAnalyticsFragment implements PathInterfa
         charityView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				//category, action, label, value
-				trackEvent("Main", "Charity", "Click", 0);
+				trackPageView("/paypal");
 				hapticFeedback.vibrate(50);
 				showFragment(Constants.PAYPAL_FRAG, R.id.paypalfrag);
 			}
@@ -88,23 +79,13 @@ public class MainFragment extends GoogleAnalyticsFragment implements PathInterfa
         
     	return view;
     }
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	Log.i("fragments", "onResume: MainFragment");
-    }
-
-	@Override
-	public Path getPath() {
-		return Path.MAIN;
-	}
 
 	protected void showFragment(String tag, int id) {
 		Fragment fragment = getFragmentManager().findFragmentByTag(tag);
 		if (fragment == null) {
 			fragment = FragmentFactory.getNewFragment(id);
 		}
+		trackerUpdate(tag);
 		FragmentTransaction transaction = getFragmentManager().beginTransaction();
 		transaction.replace(R.id.fragment_frame, fragment, tag);
 		transaction.addToBackStack(tag);

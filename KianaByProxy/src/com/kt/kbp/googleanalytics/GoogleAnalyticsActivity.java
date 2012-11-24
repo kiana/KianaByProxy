@@ -1,20 +1,23 @@
 package com.kt.kbp.googleanalytics;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
-import com.kt.kbp.tracker.SessionTracker;
 
-public class GoogleAnalyticsActivity extends FragmentActivity implements PathInterface {
+public class GoogleAnalyticsActivity extends FragmentActivity {
 
 	protected GoogleAnalyticsTracker tracker;
 	protected LocationTracker locationTracker;
@@ -28,51 +31,37 @@ public class GoogleAnalyticsActivity extends FragmentActivity implements PathInt
     protected void onResume() {
         super.onResume();
         GoogleAnalyticsTracker.getInstance().startNewSession(Constants.GA_TRACKING_ID, 1000*60, getApplicationContext());
-        getLocationTracker();
+        loadLocationTracker();
     }
     
+    @Override
+    protected void onUserLeaveHint() {
+    	super.onUserLeaveHint();
+		Log.i("fragments", "onuserleavehint, you wanna save user actions");
+        if (PathTracker.getInstance().hasPathData() && getLocationTracker().hasLocation()) {
+        	Log.i("fragments", "onUserLeaveHint: GoogleAnalyticsActivity. Send data now.");
+        	dumpReport();
+        	PathTracker.getInstance().clearPath();
+        }
+    }
+	
+    @Override
     protected void onStop() {
     	super.onStop();
+    	Log.i("stopping", "check do we go through this method when pressing BACK button or pressing HOME button");
     	GoogleAnalyticsTracker.getInstance().dispatch();
     	GoogleAnalyticsTracker.getInstance().stopSession();
-    	
-        if (SessionTracker.getInstance().shouldStartNewSession() 
-        		&& PathTracker.getInstance().hasPathData()
-        		&& getLocationTracker().hasLocation()) {
-        	//insertUserPathData();
-        	Toast.makeText(this, PathTracker.getInstance().getPath(), Toast.LENGTH_LONG).show();
-        	Toast.makeText(this, getLocationTracker().getLocation().getLatitude() + "+" +
-        			getLocationTracker().getLocation().getLongitude(), Toast.LENGTH_LONG).show();
-        	Toast.makeText(this, getID(), Toast.LENGTH_LONG).show();
-        }
-        
-    	Log.i("fragments", "onStop: MainActivity. Send data now.");
     }
     
-    
-	public void trackEvent(String category, String action, String label, int value) {
-		getTracker().trackEvent(category, action, label, value);
-	}
-    
-    protected GoogleAnalyticsTracker getTracker() {
-    	if (tracker == null) {
-    		tracker = GoogleAnalyticsTracker.getInstance();
-    	}
-    	return tracker;
-    }
-    
-    public void insertUserPathData() {
-    	Log.i("userPathData", "dispatching: " + PathTracker.getInstance().getPath());
-    }
-    
-	@Override
-	public Path getPath() {
-		return Path.GOOGLEANALYTICS;
-	}
-    
-	public LocationTracker getLocationTracker() {
+	public void loadLocationTracker() {
 		if (locationTracker == null) {
 			locationTracker = new LocationTracker(this);
+		}
+	}
+	
+	public LocationTracker getLocationTracker() {
+		if (locationTracker == null) {
+			loadLocationTracker();
 		}
 		return locationTracker;
 	}
@@ -82,18 +71,32 @@ public class GoogleAnalyticsActivity extends FragmentActivity implements PathInt
                 Secure.ANDROID_ID);
 	}
 	
-//    protected PathTracker getPathTracker() {
-//    	if (pathTracker == null) {
-//    		pathTracker = PathTracker.getInstance();
-//    	}
-//    	return pathTracker;
-//    }
-//    
-//    protected SessionTracker getSessionTracker() {
-//    	if (sessionTracker == null) {
-//    		sessionTracker = SessionTracker.getInstance();
-//    	}
-//    	return sessionTracker;
-//    }
+	private void dumpReport() {
+	    try {
+	        File file = new File(Environment.getExternalStorageDirectory(), "kianabyproxy-" + System.currentTimeMillis() + ".txt");
+	        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	        
+	        writer.write("DeviceId: " + getID());
+	        writer.newLine();
+	        writer.write("Location: " + getLocationTracker().getLocation().getLatitude() 
+					+ "+" + getLocationTracker().getLocation().getLongitude());
+	        writer.newLine();
+	        writer.write("Path: ");
+	        writer.newLine();
+
+	        List<String> stops = PathTracker.getInstance().getPath();
+	        for (String stop : stops) {
+	        	writer.write(stop);
+	        	writer.newLine();
+	        }
+
+
+	        writer.flush();
+	        writer.close();
+
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
 
 }

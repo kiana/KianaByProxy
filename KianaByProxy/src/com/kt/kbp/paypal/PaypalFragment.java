@@ -17,8 +17,6 @@ import com.google.android.apps.analytics.Transaction.Builder;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 import com.paypal.android.MEP.CheckoutButton;
 import com.paypal.android.MEP.PayPal;
 import com.paypal.android.MEP.PayPalInvoiceData;
@@ -26,7 +24,7 @@ import com.paypal.android.MEP.PayPalInvoiceItem;
 import com.paypal.android.MEP.PayPalPayment;
 import com.paypal.android.MEP.PayPalResultDelegate;
 
-public class PaypalFragment extends GoogleAnalyticsFragment implements PayPalResultDelegate, PathInterface, Serializable {
+public class PaypalFragment extends GoogleAnalyticsFragment implements PayPalResultDelegate, Serializable {
 
 	private static final long serialVersionUID = 6847175698452844410L;
 	
@@ -85,14 +83,12 @@ public class PaypalFragment extends GoogleAnalyticsFragment implements PayPalRes
 
 	@Override
 	public void onPaymentCanceled(String paymentStatus) {
-		Log.i("fragments", "paypal cancelled: " + paymentStatus);
 		trackEvent("Paypal", "Canceled", paymentStatus, 0);
 	}
 
 	@Override
 	public void onPaymentFailed(String paymentStatus, String correlationId, String payKey,
 			String errorId, String errorMessage) {
-		Log.i("fragments", "paypal failed: " + paymentStatus);
 		trackEvent("Paypal", "Failed", errorId + "|" + errorMessage, 0);
 	}
 
@@ -107,10 +103,5 @@ public class PaypalFragment extends GoogleAnalyticsFragment implements PayPalRes
 		
 		trackTransaction(transaction);
 		trackEvent("Paypal", "Succeeded", paymentStatus, 0);
-	}
-	
-	@Override
-	public Path getPath() {
-		return Path.DONATE;
 	}
 }

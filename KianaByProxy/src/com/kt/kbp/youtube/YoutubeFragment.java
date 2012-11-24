@@ -12,7 +12,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +22,8 @@ import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.UrlConverter;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class YoutubeFragment extends GoogleAnalyticsListFragment  implements PathInterface {
+public class YoutubeFragment extends GoogleAnalyticsListFragment {
 
 	private OnVideoSelectedListener videoSelectedListener;
 	
@@ -40,7 +37,6 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment  implements Pat
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "onResume: YoutubeFragment");
     	loadVideos(Constants.YOUTUBE_URL);
     }
     
@@ -59,7 +55,8 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment  implements Pat
     public void onListItemClick(ListView listView, View v, int position, long id) {
     	YoutubeEntry entry = (YoutubeEntry) listView.getItemAtPosition(position);
     	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
-    		trackEvent("Youtube", "Click|Video", entry.getId(), 0);
+    		trackEvent("Youtube", "Click", entry.getId(), 0);
+    		trackerUpdate("youtube:" + entry.getId());
         	videoSelectedListener.onVideoSelected(entry.getId());
     	} else {
     		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
@@ -118,11 +115,6 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment  implements Pat
 		VideoListAdapter adapter = new VideoListAdapter(getActivity(), R.layout.youtube_row, entries);
 		listView.setAdapter(adapter);
     }
-    
-	@Override
-	public Path getPath() {		
-		return Path.YOUTUBE;
-	}
 	
 	public interface OnVideoSelectedListener {
 		public void onVideoSelected(String youtubeId);

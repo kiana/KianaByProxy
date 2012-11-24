@@ -40,13 +40,13 @@ public class FragmentFactory {
 	public static void toggle(FragmentManager manager, int fragmentToShow) {
 		FragmentTransaction transaction = manager.beginTransaction();
 		for (Integer id : fragments) {
+			Fragment fragment = manager.findFragmentById(id);
 			if (id == fragmentToShow) {
-				Fragment fragment = manager.findFragmentById(fragmentToShow);
 				if (fragment != null && fragment.isHidden()) {
 					transaction.show(fragment);
 				}
 			} else {
-				
+				transaction.hide(fragment);
 			}
 		}
 	}

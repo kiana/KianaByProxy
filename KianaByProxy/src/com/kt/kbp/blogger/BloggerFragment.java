@@ -10,7 +10,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,26 +21,21 @@ import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
 import com.kt.kbp.common.UrlConverter;
 import com.kt.kbp.googleanalytics.GoogleAnalyticsListFragment;
-import com.kt.kbp.path.Path;
-import com.kt.kbp.path.PathInterface;
 
-public class BloggerFragment extends GoogleAnalyticsListFragment implements PathInterface {
+public class BloggerFragment extends GoogleAnalyticsListFragment {
 
-	private View view;
 	private OnBlogEntrySelectedListener blogEntrySelectedListener;
-	
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	view = inflater.inflate(R.layout.fragment_blogger, container, false);
+    	View view = inflater.inflate(R.layout.fragment_blogger, container, false);
     	return view;
     }
     
     @Override
     public void onResume() {
     	super.onResume();
-    	Log.i("fragments", "onResume: BloggerFragment");
     	new GetBlogEntriesTask().execute(Constants.BLOGGER_URL);
     }
     
@@ -58,6 +52,8 @@ public class BloggerFragment extends GoogleAnalyticsListFragment implements Path
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
     	BlogEntry entry = (BlogEntry) listView.getItemAtPosition(position);
+		trackPageView("/blog" + id);
+		trackerUpdate("blog:" + id);
     	blogEntrySelectedListener.onBlogEntrySelected(entry);
     }
     
@@ -86,7 +82,7 @@ public class BloggerFragment extends GoogleAnalyticsListFragment implements Path
 		}
 		
 	    protected void hideProgressBar() {
-	    	ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+	    	ProgressBar progressBar = (ProgressBar) getActivity().findViewById(R.id.progressBar);
 	    	progressBar.setVisibility(View.GONE);
 	    }
 	    
@@ -108,7 +104,7 @@ public class BloggerFragment extends GoogleAnalyticsListFragment implements Path
     }
     
     protected void loadBlog(Blog blog) {
-    	TextView title = (TextView) view.findViewById(R.id.blog_title);
+    	TextView title = (TextView) getActivity().findViewById(R.id.blog_title);
     	title.setText(blog.getTitle());
     	
     	loadListAdapter(blog.getBlogEntries());
@@ -116,14 +112,9 @@ public class BloggerFragment extends GoogleAnalyticsListFragment implements Path
     
     protected void loadListAdapter(List<BlogEntry> entries) {
     	final ListView listView = getListView();
-    	BlogEntryListAdapter listAdapter = new BlogEntryListAdapter(view.getContext(), R.layout.blogger_row, entries); 	
+    	BlogEntryListAdapter listAdapter = new BlogEntryListAdapter(getActivity(), R.layout.blogger_row, entries); 	
     	listView.setAdapter(listAdapter);
     }
-    
-	@Override
-	public Path getPath() {
-		return Path.BLOGGER;
-	}
 	
 	public interface OnBlogEntrySelectedListener {
 		public void onBlogEntrySelected(BlogEntry entry);
