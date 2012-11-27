@@ -84,17 +84,6 @@ public class MainFragment extends GoogleAnalyticsFragment {
 			}
 		});
         
-        TextView charityView = (TextView) view.findViewById(R.id.charity_link);
-        charityView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				trackPageView("/paypal");
-				hapticFeedback.vibrate(50);
-				handleFragment(Constants.PAYPAL_FRAG, R.id.paypalfrag);
-			}
-		});
-        
-        
        TextView exportView = (TextView) view.findViewById(R.id.report_link);
        exportView.setOnClickListener(new OnClickListener() {
     	   @Override

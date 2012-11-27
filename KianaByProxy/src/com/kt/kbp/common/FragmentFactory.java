@@ -13,7 +13,6 @@ import com.kt.kbp.blogger.BloggerFragment;
 import com.kt.kbp.blogger.ShowBlogEntryFragment;
 import com.kt.kbp.flickr.FlickrFragment;
 import com.kt.kbp.flickr.ShowPhotoFragment;
-import com.kt.kbp.paypal.PaypalFragment;
 import com.kt.kbp.twitter.TwitterFragment;
 import com.kt.kbp.youtube.YoutubeFragment;
 
@@ -25,7 +24,6 @@ public class FragmentFactory {
 		fragments.add(R.id.bloggerfrag);
 		fragments.add(R.id.flickrfrag);
 		fragments.add(R.id.mainfrag);
-		fragments.add(R.id.paypalfrag);
 		fragments.add(R.id.showblogentryfrag);
 		fragments.add(R.id.showphotofrag);
 		fragments.add(R.id.twitterfrag);
@@ -62,8 +60,6 @@ public class FragmentFactory {
 			return new TwitterFragment();
 		case R.id.youtubefrag:
 			return new YoutubeFragment();
-		case R.id.paypalfrag:
-			return new PaypalFragment();
 		default:
 			return new MainFragment();
 		}

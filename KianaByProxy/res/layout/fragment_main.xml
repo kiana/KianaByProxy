@@ -79,24 +79,6 @@
         	android:paddingTop="5dp">
 	        <TextView
 	            android:layout_span="2"
-	            android:id="@+id/charity_link"
-	        	android:layout_width="wrap_content"
-	        	android:layout_height="wrap_content"
-        		android:gravity="center_horizontal"
-    			android:textColor="@color/link"
-	        	android:clickable="true"
-        		android:textSize="16dp"
-	        	android:padding="@dimen/padding_medium"
-	        	android:text="@string/charity_name" /> 	
-	    </TableRow> 
-    	<TableRow 
-    	    android:id="@+id/tableRow5"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:gravity="center_horizontal"
-        	android:paddingTop="5dp">
-	        <TextView
-	            android:layout_span="2"
 	            android:id="@+id/report_link"
 	        	android:layout_width="wrap_content"
 	        	android:layout_height="wrap_content"
@@ -108,7 +90,7 @@
 	        	android:text="@string/export_report" />	   	          
 	    </TableRow> 
     	<TableRow 
-    	    android:id="@+id/tableRow6"
+    	    android:id="@+id/tableRow5"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:gravity="center_horizontal"
