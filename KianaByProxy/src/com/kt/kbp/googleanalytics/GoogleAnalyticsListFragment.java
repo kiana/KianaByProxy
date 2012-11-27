@@ -45,7 +45,7 @@ public class GoogleAnalyticsListFragment extends ListFragment {
     protected Tracker getTracker() {
     	if (tracker == null) {
             GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
-            googleAnalytics.setDebug(true);
+            //googleAnalytics.setDebug(true);
             tracker = googleAnalytics.getTracker(Constants.GA_TRACKING_ID);
     	}
     	return tracker;

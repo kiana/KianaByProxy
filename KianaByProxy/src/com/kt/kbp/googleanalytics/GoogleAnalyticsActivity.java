@@ -22,7 +22,6 @@ import com.kt.kbp.tracker.PathTracker;
 public class GoogleAnalyticsActivity extends FragmentActivity {
 
 	protected Tracker tracker;
-	//protected LocationTracker locationTracker;
 	protected GoogleAnalytics googleAnalytics;
 	
     @Override
