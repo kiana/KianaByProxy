@@ -4,99 +4,104 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
+import java.lang.Thread.UncaughtExceptionHandler;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings.Secure;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
 
 public class GoogleAnalyticsActivity extends FragmentActivity {
 
-	protected GoogleAnalyticsTracker tracker;
-	protected LocationTracker locationTracker;
+	protected Tracker tracker;
+	//protected LocationTracker locationTracker;
+	protected GoogleAnalytics googleAnalytics;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getApplicationContext());
+        tracker = googleAnalytics.getTracker(Constants.GA_TRACKING_ID);
+        
+        Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread thread, Throwable ex) {
+				dumpExceptionReport(ex.getMessage());
+			}
+		});
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        GoogleAnalyticsTracker.getInstance().startNewSession(Constants.GA_TRACKING_ID, 1000*60, getApplicationContext());
-        loadLocationTracker();
+    protected void onPause() {
+    	super.onPause();
+    	PathTracker.getInstance().clearPath();
     }
     
-    @Override
-    protected void onUserLeaveHint() {
-    	super.onUserLeaveHint();
-		Log.i("fragments", "onuserleavehint, you wanna save user actions");
-        if (PathTracker.getInstance().hasPathData() && getLocationTracker().hasLocation()) {
-        	Log.i("fragments", "onUserLeaveHint: GoogleAnalyticsActivity. Send data now.");
-        	dumpReport();
-        	PathTracker.getInstance().clearPath();
-        }
-    }
-	
-    @Override
-    protected void onStop() {
-    	super.onStop();
-    	Log.i("stopping", "check do we go through this method when pressing BACK button or pressing HOME button");
-    	GoogleAnalyticsTracker.getInstance().dispatch();
-    	GoogleAnalyticsTracker.getInstance().stopSession();
+    protected void showExceptionDialog(Throwable ex) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	
+        builder.setMessage(ex.getMessage())
+               .setPositiveButton("Send", new ExceptionSender(ex))
+               .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                       // User cancelled the dialog
+                   }
+               });
+
+        builder.create().show();
     }
     
-	public void loadLocationTracker() {
-		if (locationTracker == null) {
-			locationTracker = new LocationTracker(this);
+    protected class ExceptionSender implements OnClickListener {
+
+    	private Throwable throwable;
+    	
+    	public ExceptionSender(Throwable throwable) {
+    		this.throwable = throwable;
+    	}
+    	
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+			
+			StringBuilder emailContent = new StringBuilder();
+			if (PathTracker.getInstance().hasPathData()) {
+				emailContent.append(PathTracker.getInstance().getPathStringBuilder());
+				emailContent.append("\n");
+			}
+			emailContent.append(throwable.getMessage());
+   			final Intent intent = new Intent(Intent.ACTION_SEND);
+		    intent.setType("plain/text");
+		    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"kianabyproxy@gmail.com"});
+		    intent.putExtra(Intent.EXTRA_SUBJECT, "AnDevConIV: Exception Thrown");
+		    intent.putExtra(Intent.EXTRA_TEXT, emailContent.toString());
+		    startActivity(intent);
 		}
-	}
-	
-	public LocationTracker getLocationTracker() {
-		if (locationTracker == null) {
-			loadLocationTracker();
-		}
-		return locationTracker;
-	}
-	
-	private String getID() {
-		return Secure.getString(getContentResolver(),
-                Secure.ANDROID_ID);
-	}
-	
-	private void dumpReport() {
-	    try {
-	        File file = new File(Environment.getExternalStorageDirectory(), "kianabyproxy-" + System.currentTimeMillis() + ".txt");
-	        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-	        
-	        writer.write("DeviceId: " + getID());
-	        writer.newLine();
-	        writer.write("Location: " + getLocationTracker().getLocation().getLatitude() 
-					+ "+" + getLocationTracker().getLocation().getLongitude());
-	        writer.newLine();
-	        writer.write("Path: ");
-	        writer.newLine();
+    	
+    }
+    
+    private void dumpExceptionReport(String message) {
+    	try {		
 
-	        List<String> stops = PathTracker.getInstance().getPath();
-	        for (String stop : stops) {
-	        	writer.write(stop);
-	        	writer.newLine();
-	        }
+    		File file = new File(Environment.getExternalStorageDirectory(), "kianabyproxy-exceptionreport.txt");
+    		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
-
-	        writer.flush();
-	        writer.close();
-
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
-	}
-
+    		if (PathTracker.getInstance().hasPathData()) {
+    			writer.write(PathTracker.getInstance().getPathStringBuilder().toString());
+    			writer.newLine();
+    		}
+    		writer.write(message);
+    		writer.flush();
+    		writer.close();
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
+    }
 }

@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -30,12 +31,19 @@ public class BloggerFragment extends GoogleAnalyticsListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	View view = inflater.inflate(R.layout.fragment_blogger, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+        beginLoadBlog();
+        
     	return view;
     }
     
-    @Override
-    public void onResume() {
-    	super.onResume();
+    
+    public void beginLoadBlog() {
     	new GetBlogEntriesTask().execute(Constants.BLOGGER_URL);
     }
     
@@ -51,10 +59,9 @@ public class BloggerFragment extends GoogleAnalyticsListFragment {
     
     @Override
     public void onListItemClick(ListView listView, View v, int position, long id) {
+    	trackPageView("/blog" + position);
     	BlogEntry entry = (BlogEntry) listView.getItemAtPosition(position);
-		trackPageView("/blog" + id);
-		trackerUpdate("blog:" + id);
-    	blogEntrySelectedListener.onBlogEntrySelected(entry);
+    	blogEntrySelectedListener.onBlogEntrySelected(entry, position);
     }
     
     private class GetBlogEntriesTask extends AsyncTask<String, Void, Blog> {
@@ -64,13 +71,13 @@ public class BloggerFragment extends GoogleAnalyticsListFragment {
 			try {
 				return getBlog(urls[0]);
 			} catch (IOException e) {
-				trackException("Blogger", e.getMessage());
+				trackException("Blogger", e);
 				return null;
 			} catch (XmlPullParserException e) {
-				trackException("Blogger", e.getMessage());
+				trackException("Blogger", e);
 				return null; 
 			} catch (ParseException e) {
-				trackException("Blogger", e.getMessage());
+				trackException("Blogger", e);
 				return null;
 			}
 		}
@@ -117,7 +124,7 @@ public class BloggerFragment extends GoogleAnalyticsListFragment {
     }
 	
 	public interface OnBlogEntrySelectedListener {
-		public void onBlogEntrySelected(BlogEntry entry);
+		public void onBlogEntrySelected(BlogEntry entry, int position);
 	}
 
 }

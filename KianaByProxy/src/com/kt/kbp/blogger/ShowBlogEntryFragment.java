@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,6 +22,13 @@ public class ShowBlogEntryFragment extends GoogleAnalyticsFragment {
     	super.onCreateView(inflater, container, savedInstanceState);
     	
     	View view = inflater.inflate(R.layout.fragment_show_blog_entry, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+        
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView date = (TextView) view.findViewById(R.id.date_published);
         TextView content = (TextView) view.findViewById(R.id.content);
@@ -43,13 +51,17 @@ public class ShowBlogEntryFragment extends GoogleAnalyticsFragment {
 	public String getEntryId() {
 		return getArguments().getString("id");
 	}
-
+	
 	public static ShowBlogEntryFragment newInstance(BlogEntry entry) {
 		ShowBlogEntryFragment showBlogEntryFragment = new ShowBlogEntryFragment();
+		showBlogEntryFragment.setArguments(createBundle(entry));
+		return showBlogEntryFragment;
+	}
+	
+	public static Bundle createBundle(BlogEntry entry) {
 		Bundle bundle = new Bundle();
 		bundle.putString("id", entry.getId());
 		bundle.putSerializable("entry", entry);
-		showBlogEntryFragment.setArguments(bundle);
-		return showBlogEntryFragment;
+		return bundle;
 	}
 }

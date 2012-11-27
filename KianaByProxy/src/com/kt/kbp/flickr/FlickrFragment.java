@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +33,12 @@ public class FlickrFragment extends GoogleAnalyticsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	View view = inflater.inflate(R.layout.fragment_flickr, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
         gridView = (GridView) view.findViewById(R.id.gridview);
     	return view;
     }
@@ -63,11 +70,11 @@ public class FlickrFragment extends GoogleAnalyticsFragment {
 			try {
 				photoList = flickr.getPeopleInterface().getPublicPhotos(Constants.FLICKR_USERID, 100, 1);
 			} catch (IOException e) {
-				trackException("Flickr", e.getMessage());
+				trackException("Flickr", e);
 			} catch (FlickrException e) {
-				trackException("Flickr", e.getMessage());
+				trackException("Flickr", e);
 			} catch (JSONException e) {
-				trackException("Flickr", e.getMessage());
+				trackException("Flickr", e);
 			}
 			return photoList;
 		}
@@ -93,9 +100,8 @@ public class FlickrFragment extends GoogleAnalyticsFragment {
     }
     
     public void onGridItemClick(GridView gridView, View v, int position, long id) {
+    	trackPageView("/photo" + id);
     	Photo photo = (Photo) gridView.getItemAtPosition(position);
-		trackPageView("/photo" + photo.getId());
-		trackerUpdate("photo:" + photo.getId());
     	photoSelectedListener.onPhotoSelected(photo);
     }
 }

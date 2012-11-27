@@ -1,47 +1,55 @@
 package com.kt.kbp.googleanalytics;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.google.android.apps.analytics.GoogleAnalyticsTracker;
-import com.google.android.apps.analytics.Transaction;
+import com.google.analytics.tracking.android.GoogleAnalytics;
+import com.google.analytics.tracking.android.Tracker;
+import com.google.analytics.tracking.android.Transaction;
+import com.kt.kbp.R;
+import com.kt.kbp.common.Constants;
+import com.kt.kbp.common.FragmentFactory;
+import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
-import com.kt.kbp.tracker.SessionTracker;
 
 public class GoogleAnalyticsFragment extends Fragment {
 
 	protected PathTracker pathTracker;
-	protected SessionTracker sessionTracker;
-	protected GoogleAnalyticsTracker tracker;
+	protected Tracker tracker;
+	private LocationTracker locationTracker;
     
+	public FragmentManager getSupportFragmentManager() {
+		return getFragmentManager();
+	}
+	
     public void trackerUpdate(String path) {
     	Log.i("fragments", "adding " + path + " to path list.");
-    	getPathTracker().add(path); //TODO do the ADD onClick() or in trackPageView()
-    	getSessionTracker().update(); //TODO check whether I even need this anymore now that i'm using one activity
+    	getPathTracker().add(path);
     }
     
     public void trackPageView(String pageViewed) {
-    	getTracker().trackPageView(pageViewed);
+    	getTracker().trackView(pageViewed);
     }
 	
-	public void trackEvent(String category, String action, String label, int value) {
+	public void trackEvent(String category, String action, String label, long value) {
 		getTracker().trackEvent(category, action, label, value);
 	}
 	
-	public void trackException(String category, String message) {
-		//category, action, label, value
-		getTracker().trackEvent(category, "Exception", message, 0);
+	public void trackException(String category, Exception e) {
+		getTracker().trackException("Exception:" + category, e, true);
 	}
 	
     public void trackTransaction(Transaction transaction) {
-    	getTracker().addTransaction(transaction);
-    	//TODO add item
-    	getTracker().trackTransactions();
+    	getTracker().trackTransaction(transaction);
     }
     
-    protected GoogleAnalyticsTracker getTracker() {
+    protected Tracker getTracker() {
     	if (tracker == null) {
-    		tracker = GoogleAnalyticsTracker.getInstance();
+            GoogleAnalytics googleAnalytics = GoogleAnalytics.getInstance(getActivity().getApplicationContext());
+            googleAnalytics.setDebug(true);
+            tracker = googleAnalytics.getTracker(Constants.GA_TRACKING_ID);
     	}
     	return tracker;
     }
@@ -53,11 +61,37 @@ public class GoogleAnalyticsFragment extends Fragment {
     	return pathTracker;
     }
     
-    protected SessionTracker getSessionTracker() {
-    	if (sessionTracker == null) {
-    		sessionTracker = SessionTracker.getInstance();
-    	}
-    	return sessionTracker;
+    public void handleFragment(String tag, int id) {
+    	showFragment(tag, findFragment(tag, id));
+    }
+ 
+    public Fragment findFragment(String tag, int id) {
+		Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+		if (fragment == null) {
+			fragment = FragmentFactory.getNewFragment(id);
+		}
+		return fragment;
     }
     
+	public void showFragment(String tag, Fragment fragment) {
+		trackerUpdate(tag);
+		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_frame, fragment, tag);
+		transaction.addToBackStack(tag);
+		transaction.commit();
+		getFragmentManager().executePendingTransactions();
+	}
+	
+	public void loadLocationTracker() {
+		if (locationTracker == null) {
+			locationTracker = new LocationTracker(getActivity());
+		}
+	}
+	
+	public LocationTracker getLocationTracker() {
+		if (locationTracker == null) {
+			loadLocationTracker();
+		}
+		return locationTracker;
+	}
 }

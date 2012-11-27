@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -30,16 +31,16 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	return inflater.inflate(R.layout.fragment_youtube, container, false);
+    	View view = inflater.inflate(R.layout.fragment_youtube, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+    	loadVideos(Constants.YOUTUBE_URL); //TODO put back in onResume?
+        return view;
     }
-    
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	loadVideos(Constants.YOUTUBE_URL);
-    }
-    
     
     @Override
     public void onAttach(Activity activity) {
@@ -56,7 +57,6 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment {
     	YoutubeEntry entry = (YoutubeEntry) listView.getItemAtPosition(position);
     	if (isConnected(ConnectivityManager.TYPE_WIFI)) {
     		trackEvent("Youtube", "Click", entry.getId(), 0);
-    		trackerUpdate("youtube:" + entry.getId());
         	videoSelectedListener.onVideoSelected(entry.getId());
     	} else {
     		Toast.makeText(getActivity(), "Please connect to wifi to view video.", Toast.LENGTH_LONG).show();
@@ -80,10 +80,10 @@ public class YoutubeFragment extends GoogleAnalyticsListFragment {
 			try {
 				return getYoutubeEntries(urls[0]);
 			} catch (XmlPullParserException e) {
-				trackException("Youtube", e.getMessage());
+				trackException("Youtube", e);
 				return null;
 			} catch (IOException e) {
-				trackException("Youtube", e.getMessage());
+				trackException("Youtube", e);
 				return null;
 			}
 		}

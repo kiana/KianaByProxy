@@ -31,6 +31,20 @@ public class PathTracker {
 		return path;
 	}
 	
+	public StringBuilder getPathStringBuilder() {
+		StringBuilder pathBuilder = new StringBuilder();
+		boolean initialized = false;
+		for (String step : path) {
+			if (initialized) {
+				pathBuilder.append("|");
+			}
+			pathBuilder.append(step);
+			initialized = true;
+		}
+		
+		return pathBuilder;
+	}
+	
 	public CharSequence[] getPathAsCharSequence() {
 		if (hasPathData()) {
 			return path.toArray(new CharSequence[path.size()]);
@@ -46,20 +60,5 @@ public class PathTracker {
 	public void clearPath() {
 		path = new ArrayList<String>();
 	}
-	
-	/**
-	 * This method ensures the path contains more than MainActivity and MainFragment info
-	 * @return
-	 */
-	public boolean containsData() {
-		return false;
-	}
-	
-	/**
-	 * This method returns true if the user has navigated to more than one page.
-	 * @return
-	 */
-	public boolean trackingCount() {
-		return false;
-	}
+
 }

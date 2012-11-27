@@ -10,6 +10,7 @@ import twitter4j.conf.ConfigurationBuilder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,12 +33,18 @@ public class TwitterFragment extends GoogleAnalyticsListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	View view = inflater.inflate(R.layout.fragment_twitter, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+        loadTwitter();
+        
     	return view;
     }
     
-    @Override
-    public void onResume() {
-    	super.onResume();
+    public void loadTwitter() {
         new GetTimelineTask().execute();
         new GetUserTask().execute();
     }
@@ -49,7 +56,7 @@ public class TwitterFragment extends GoogleAnalyticsListFragment {
 			try {
 				return twitter.showUser(Constants.TWITTER_USERNAME);
 			} catch (TwitterException e) {
-				trackException("Twitter|GetUser", e.getMessage());
+				trackException("Twitter|GetUser", e);
 			}
 			return null;
 		}
@@ -80,7 +87,7 @@ public class TwitterFragment extends GoogleAnalyticsListFragment {
 	        try {
 				statuses = twitter.getUserTimeline(Constants.TWITTER_USERNAME);
 			} catch (TwitterException e) {
-				trackException("Twitter|GetTimeline", e.getMessage());
+				trackException("Twitter|GetTimeline", e);
 			}
 	        return statuses;
 		}

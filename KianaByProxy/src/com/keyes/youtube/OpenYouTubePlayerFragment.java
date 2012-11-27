@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -75,6 +76,13 @@ public class OpenYouTubePlayerFragment extends GoogleAnalyticsFragment {
         
         // create the layout of the view
         View view = inflater.inflate(R.layout.fragment_video, container, false);
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+        
         mVideoView = (VideoView) view.findViewById(R.id.three);
         mProgressBar = (ProgressBar) view.findViewById(R.id.four);
         mProgressMessage = (TextView) view.findViewById(R.id.five);

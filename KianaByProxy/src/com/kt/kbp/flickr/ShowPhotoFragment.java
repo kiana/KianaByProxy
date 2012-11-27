@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +22,13 @@ public class ShowPhotoFragment extends GoogleAnalyticsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	View view = inflater.inflate(R.layout.fragment_show_photo, container, false);
-    	
+        view.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return true;
+			}
+        });
+        
     	Bundle bundle = getArguments();
         TextView title = (TextView) view.findViewById(R.id.flickr_label);
         ImageView flickrImage = (ImageView) view.findViewById(R.id.flickrimage);
@@ -31,7 +38,7 @@ public class ShowPhotoFragment extends GoogleAnalyticsFragment {
         try {
 			new StreamDrawableTask(bundle.getString("url"), progressBar).execute(flickrImage);
 		} catch (MalformedURLException e) {
-			trackException("ShowPhoto", e.getMessage());
+			trackException("ShowPhoto", e);
 		}	
         
     	return view;
@@ -47,11 +54,15 @@ public class ShowPhotoFragment extends GoogleAnalyticsFragment {
 
 	public static ShowPhotoFragment newInstance(Photo photo) {
 		ShowPhotoFragment showPhotoFragment = new ShowPhotoFragment();
+		showPhotoFragment.setArguments(createBundle(photo));
+		return showPhotoFragment;
+	}
+	
+	public static Bundle createBundle(Photo photo) {
 		Bundle bundle = new Bundle();
 		bundle.putString("id", photo.getId());
 		bundle.putString("title", photo.getTitle());
 		bundle.putString("url", photo.getLargeUrl());
-		showPhotoFragment.setArguments(bundle);
-		return showPhotoFragment;
+		return bundle;
 	}
 }
