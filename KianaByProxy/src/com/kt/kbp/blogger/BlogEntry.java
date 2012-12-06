@@ -1,9 +1,11 @@
 package com.kt.kbp.blogger;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BlogEntry {
+public class BlogEntry implements Serializable {
 
+	private static final long serialVersionUID = 8160213240317250757L;
 	private String id;
 	private Date datePublished;
 	private String title;

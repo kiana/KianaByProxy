@@ -16,5 +16,9 @@ public class Constants {
 	public static String TWITTER_FRAG = "twitter";
 	public static String BLOGGER_FRAG = "blogger";
 
+	public static long FIVE_MINUTES = 5;
+	
+	public static final String GA_TRACKING_ID = "UA-35216923-1";
+
 	
 }
