@@ -28,4 +28,7 @@
     <string name="twitter">Twitter</string>
     <string name="blogger">Blogger</string>
     <string name="foursquare">Foursquare</string>
+    
+    <string name="export_report">Export Report</string>
+    <string name="feedback">Feedback</string>
 </resources>
