@@ -2,15 +2,13 @@ package com.kt.kbp.googleanalytics;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.google.analytics.tracking.android.GoogleAnalytics;
 import com.google.analytics.tracking.android.Tracker;
 import com.google.analytics.tracking.android.Transaction;
-import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.FragmentFactory;
+import com.kt.kbp.common.FragmentHandler;
 import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
 
@@ -62,24 +60,30 @@ public class GoogleAnalyticsFragment extends Fragment {
     }
     
     public void handleFragment(String tag, int id) {
-    	showFragment(tag, findFragment(tag, id));
+    	//showFragment(tag, findFragment(tag, id));
+    	FragmentHandler.handleFragment(getFragmentManager(), tag, id);
     }
  
     public Fragment findFragment(String tag, int id) {
-		Fragment fragment = getFragmentManager().findFragmentByTag(tag);
-		if (fragment == null) {
-			fragment = FragmentFactory.getNewFragment(id);
-		}
-		return fragment;
+		
+    	return FragmentHandler.findFragment(getFragmentManager(), tag, id);
+    	
+//    	Fragment fragment = getFragmentManager().findFragmentByTag(tag);
+//		if (fragment == null) {
+//			fragment = FragmentHandler.getNewFragment(id);
+//		}
+//		return fragment;
     }
     
 	public void showFragment(String tag, Fragment fragment) {
-		trackerUpdate(tag);
-		FragmentTransaction transaction = getFragmentManager().beginTransaction();
-		transaction.replace(R.id.fragment_frame, fragment, tag);
-		transaction.addToBackStack(tag);
-		transaction.commit();
-		getFragmentManager().executePendingTransactions();
+		FragmentHandler.showFragment(getFragmentManager(), tag, fragment);
+		
+//		trackerUpdate(tag);
+//		FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//		transaction.replace(R.id.fragment_frame, fragment, tag);
+//		transaction.addToBackStack(tag);
+//		transaction.commit();
+//		getFragmentManager().executePendingTransactions();
 	}
 	
 	public void loadLocationTracker() {

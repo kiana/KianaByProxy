@@ -11,10 +11,14 @@ public class Constants {
 	
 	public static final String BLOGGER_URL = "http://www.blogger.com/feeds/6257735918379257562/posts/default";
 
+	public static String MAIN_FRAG = "main";
 	public static String YOUTUBE_FRAG = "youtube";
 	public static String FLICKR_FRAG = "flickr";
 	public static String TWITTER_FRAG = "twitter";
 	public static String BLOGGER_FRAG = "blogger";
+	public static String SHOW_PHOTO_FRAG = "photo";
+	public static String SHOW_BLOG_ENTRY_FRAG = "blogentry";
+	public static String SHOW_VIDEO_FRAG = "video";
 
 	public static long FIVE_MINUTES = 5;
 	

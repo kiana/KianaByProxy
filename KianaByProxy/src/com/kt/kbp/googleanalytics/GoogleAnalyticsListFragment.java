@@ -10,7 +10,7 @@ import com.google.analytics.tracking.android.Tracker;
 import com.google.analytics.tracking.android.Transaction;
 import com.kt.kbp.R;
 import com.kt.kbp.common.Constants;
-import com.kt.kbp.common.FragmentFactory;
+import com.kt.kbp.common.FragmentHandler;
 import com.kt.kbp.tracker.LocationTracker;
 import com.kt.kbp.tracker.PathTracker;
 
@@ -65,7 +65,7 @@ public class GoogleAnalyticsListFragment extends ListFragment {
     public Fragment findFragment(String tag, int id) {
 		Fragment fragment = getFragmentManager().findFragmentByTag(tag);
 		if (fragment == null) {
-			fragment = FragmentFactory.getNewFragment(id);
+			fragment = FragmentHandler.getNewFragment(id);
 		}
 		return fragment;
     }

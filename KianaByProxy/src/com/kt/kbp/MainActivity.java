@@ -1,74 +1,69 @@
 package com.kt.kbp;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ImageView;
 
-import com.kt.kbp.blogger.BloggerActivity;
-import com.kt.kbp.flickr.FlickrActivity;
-import com.kt.kbp.twitter.TwitterActivity;
-import com.kt.kbp.youtube.YoutubeActivity;
+import com.gmail.yuyang226.flickr.photos.Photo;
+import com.keyes.youtube.OpenYouTubePlayerFragment;
+import com.kt.kbp.blogger.BlogEntry;
+import com.kt.kbp.blogger.BloggerFragment.OnBlogEntrySelectedListener;
+import com.kt.kbp.blogger.ShowBlogEntryFragment;
+import com.kt.kbp.common.Constants;
+import com.kt.kbp.common.FragmentHandler;
+import com.kt.kbp.flickr.ShowPhotoFragment;
+import com.kt.kbp.flickr.ShowPhotoFragment.OnPhotoSelectedListener;
+import com.kt.kbp.youtube.YoutubeFragment.OnVideoSelectedListener;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity implements OnBlogEntrySelectedListener, OnPhotoSelectedListener, OnVideoSelectedListener {
 	
-	private Vibrator hapticFeedback;
-		
-	//TODO cleanup drawable directories
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        hapticFeedback = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         setContentView(R.layout.activity_main);
         
-        ImageView youtubeView = (ImageView) findViewById(R.id.img_youtube);
-        youtubeView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				hapticFeedback.vibrate(50);
-				Intent i = new Intent(view.getContext(), YoutubeActivity.class);
-				startActivity(i);
-			}
-		});
-        
-        ImageView flickrView = (ImageView) findViewById(R.id.img_flickr);
-        flickrView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				hapticFeedback.vibrate(50);
-				Intent i = new Intent(view.getContext(),FlickrActivity.class);
-				startActivity(i);
-			}
-		});
-        
-        ImageView twitterView = (ImageView) findViewById(R.id.img_twitter);
-        twitterView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				hapticFeedback.vibrate(50);
-				Intent i = new Intent(view.getContext(),TwitterActivity.class);
-				startActivity(i);
-			}
-		});
-        
-        ImageView bloggerView = (ImageView) findViewById(R.id.img_blogger);
-        bloggerView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				hapticFeedback.vibrate(50);
-				Intent i = new Intent(view.getContext(), BloggerActivity.class);
-				startActivity(i);
-			}
-		});
+		FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		transaction.replace(R.id.fragment_frame, new MainFragment(), Constants.MAIN_FRAG);
+		transaction.addToBackStack(Constants.MAIN_FRAG);
+		transaction.commit();
+		getSupportFragmentManager().executePendingTransactions();
     }
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_main, menu);
         return true;
-    } 
+    }
+
+	@Override
+	public void onPhotoSelected(Photo photo) {
+		Fragment showPhotoFragment = ShowPhotoFragment.newInstance(photo);
+		
+		FragmentHandler.showFragment(getSupportFragmentManager(), 
+				Constants.SHOW_PHOTO_FRAG, 
+				showPhotoFragment);
+	}
+
+	@Override
+	public void onBlogEntrySelected(BlogEntry entry, int position) {
+		Fragment showBlogEntryFragment = ShowBlogEntryFragment.newInstance(entry);
+		FragmentHandler.showFragment(getSupportFragmentManager(), 
+				Constants.SHOW_BLOG_ENTRY_FRAG, 
+				showBlogEntryFragment);
+		
+	}
+
+	@Override
+	public void onVideoSelected(String youtubeId) {
+		
+		getIntent().setData(Uri.parse("ytv://" + youtubeId));
+		
+		Fragment showVideoFragment = new OpenYouTubePlayerFragment();
+		FragmentHandler.showFragment(getSupportFragmentManager(), 
+				Constants.SHOW_VIDEO_FRAG, 
+				showVideoFragment);
+	} 
 }

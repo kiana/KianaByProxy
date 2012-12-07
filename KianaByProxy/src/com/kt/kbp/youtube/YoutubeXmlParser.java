@@ -53,7 +53,7 @@ public class YoutubeXmlParser extends XmlParser {
     	parser.require(XmlPullParser.START_TAG, null, "entry");
 
     	MediaGroup mediaGroup = null;
-    	String viewCount = null;
+    	String viewCount = "0";
     	String id = null;
     	
     	while (parser.next() != XmlPullParser.END_TAG) {
@@ -159,8 +159,15 @@ public class YoutubeXmlParser extends XmlParser {
     	int minutes = d / 60;
     	int seconds = d % 60;
     	
-    	formattedDuration = minutes + ":" + seconds;
+    	formattedDuration = format(minutes) + ":" + format(seconds);
     	return formattedDuration;
+    }
+    
+    private String format(int time) {
+    	if (time < 10) {
+    		return "0" + time;
+    	}
+    	return time + "";
     }
     
     private String readId(XmlPullParser parser, String namespacedPrefix) throws XmlPullParserException, IOException {
