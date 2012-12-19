@@ -13,7 +13,6 @@
 
     <string name="connection_error">Connection error parsing Youtube feed. Super sadness.</string>
     <string name="xml_error">XML error parsing Youtube feed. Super sadness.</string>
-    <string name="back">&lt; back</string>
     <string name="wait_desc">Waiting for activity to load.</string>
     <string name="youtubethumbnail">Youtube Video Thumbnail</string>
     <string name="flickrimage">Flickr Image</string>

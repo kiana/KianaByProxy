@@ -6,22 +6,12 @@
     android:id="@+id/bloggerfrag" >
 
     <TextView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_medium"
-        android:clickable="true"
-        android:text="@string/back" 
-    	android:textColor="@color/link" />
-    
-    <TextView
         android:id="@+id/blog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/back" />
+        android:layout_centerHorizontal="true" />
 
     <ListView
         android:id="@android:id/list"

@@ -5,19 +5,9 @@
     android:background="#FFFFFF"
     android:id="@+id/youtubefrag" >
 
-    <TextView
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_medium"
-        android:clickable="true"
-        android:text="@string/back"
-        android:textColor="@color/link" />
-    
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@id/back" />
+        android:layout_height="fill_parent" />
 
 </RelativeLayout>
